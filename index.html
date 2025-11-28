@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USCG Auxiliary BQ Progress Tracker</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -335,55 +333,6 @@
             margin-top: 10px;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex !important;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            color: #1e3c72;
-            margin: 0;
-        }
-
-        .close-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -556,47 +505,13 @@
             </div>
 
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px;">
-                <h2 style="color: #1e3c72; margin-bottom: 20px;">All Trainees Status (Click a name to see details)</h2>
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">All Trainees Status</h2>
                 <div class="admin-grid" id="adminGrid"></div>
-            </div>
-
-            <!-- DETAIL MODAL -->
-            <div id="detailModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 id="modalTraineeName"></h2>
-                        <button class="close-btn" onclick="closeDetailModal()">Close</button>
-                    </div>
-                    
-                    <div class="stat-card" style="margin-bottom: 20px;">
-                        <div class="stat-value" id="modalTotalProgress">0%</div>
-                        <div class="stat-label">Overall Progress</div>
-                    </div>
-
-                    <div id="modalSections"></div>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDPMyc7sSMRu14Tiv4JqMs_aNPOethl_qY",
-            authDomain: "uscgaux-training.firebaseapp.com",
-            databaseURL: "https://uscgaux-training-default-rtdb.firebaseio.com",
-            projectId: "uscgaux-training",
-            storageBucket: "uscgaux-training.firebasestorage.app",
-            messagingSenderId: "911814802506",
-            appId: "1:911814802506:web:dde9ec3584d28b5dca7ab3",
-            measurementId: "G-F2S5F4E6NN"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // Trainees list
         const TRAINEES = [
             { memberId: '5009810', name: 'Jessica Arciero' },
             { memberId: '1249011', name: 'Stephen Belcher' },
@@ -615,7 +530,6 @@
             { memberId: '5009879', name: 'Nauzer Gotla' }
         ];
 
-        // Checklist items
         const CHECKLIST = [
             { id: 'setup1', section: 'setup', label: 'Secure welcome letter' },
             { id: 'setup2', section: 'setup', label: 'Save Member ID and Flotilla Number' },
@@ -626,33 +540,25 @@
             { id: 'setup7', section: 'setup', label: 'Get enrollment keys for courses' },
             { id: 'setup8', section: 'setup', label: 'System navigation notes completed' },
             { id: 'training1', section: 'training', label: 'Module 1: History, Purpose and Administration' },
-            { id: 'training2', section: 'training', label: 'Module 2: Membership Requirements and Organizational Structure' },
-            { id: 'training3', section: 'training', label: 'Module 3: Member Training and Qualifications, Uniforms and Customs' },
-            { id: 'training4', section: 'training', label: 'Module 4: Personnel Management and Auxiliarist Recognition' },
-            { id: 'training5', section: 'training', label: 'Module 6: Support, Basic Materials and Reimbursement' },
-            { id: 'training6', section: 'training', label: 'Module 7: Courtesy and Protocols for Auxiliary Units' },
-            { id: 'training7', section: 'training', label: 'California Boater Card' },
-            { id: 'training8', section: 'training', label: 'FEMA ICS-100' },
-            { id: 'training9', section: 'training', label: 'FEMA IS-700' },
-            { id: 'training10', section: 'training', label: 'Bloodborne Pathogens' },
-            { id: 'training11', section: 'training', label: 'Ethics (502306)' },
-            { id: 'training12', section: 'training', label: 'Privacy Awareness (810015)' },
-            { id: 'training13', section: 'training', label: 'Sexual Harassment Prevention (810000)' },
-            { id: 'training14', section: 'training', label: 'Suicide Prevention (SPT2024)' },
+            { id: 'training2', section: 'training', label: 'Module 2: Membership Requirements' },
+            { id: 'training3', section: 'training', label: 'Module 3: Training and Qualifications' },
+            { id: 'training4', section: 'training', label: 'Module 4: Personnel Management' },
+            { id: 'training5', section: 'training', label: 'Module 6: Support and Reimbursement' },
+            { id: 'training6', section: 'training', label: 'Module 7: Courtesy and Protocols' },
             { id: 'records1', section: 'records', label: 'Set up AUXDATA II access' },
             { id: 'records2', section: 'records', label: 'Complete short AD2 training' },
-            { id: 'records3', section: 'records', label: 'Verify training records in AUXDATA II' },
-            { id: 'records4', section: 'records', label: 'Confirm FEMA certificates uploaded' },
-            { id: 'records5', section: 'records', label: 'Ensure Bloodborne Pathogens recorded' },
+            { id: 'records3', section: 'records', label: 'Verify training records' },
+            { id: 'records4', section: 'records', label: 'Confirm FEMA certificates' },
+            { id: 'records5', section: 'records', label: 'Bloodborne Pathogens recorded' },
             { id: 'uniform1', section: 'uniforms', label: 'Order ODU from shopcgx.com' },
-            { id: 'uniform2', section: 'uniforms', label: 'Order devices and accessories from auxcen.com' },
+            { id: 'uniform2', section: 'uniforms', label: 'Order from auxcen.com' },
             { id: 'uniform3', section: 'uniforms', label: 'Order Tropical Blue uniform' },
-            { id: 'uniform4', section: 'uniforms', label: 'Acquire required boots and accessories' },
-            { id: 'uniform5', section: 'uniforms', label: 'Schedule and pass uniform inspection' },
-            { id: 'final1', section: 'final', label: 'Verify all training completed in AUXDATA II' },
-            { id: 'final2', section: 'final', label: 'Confirm boater certification recorded' },
-            { id: 'final3', section: 'final', label: 'Confirm uniform inspection recorded' },
-            { id: 'final4', section: 'final', label: 'Apply for Auxiliary ID card & achieve BQ!' }
+            { id: 'uniform4', section: 'uniforms', label: 'Acquire boots and accessories' },
+            { id: 'uniform5', section: 'uniforms', label: 'Schedule and pass inspection' },
+            { id: 'final1', section: 'final', label: 'Verify all training completed' },
+            { id: 'final2', section: 'final', label: 'Confirm boater certification' },
+            { id: 'final3', section: 'final', label: 'Confirm uniform inspection' },
+            { id: 'final4', section: 'final', label: 'Apply for Auxiliary ID card' }
         ];
 
         let currentUser = null;
@@ -661,7 +567,6 @@
         function selectLoginType(type) {
             document.querySelectorAll('.type-button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
             document.getElementById('traineeLogin').style.display = type === 'trainee' ? 'flex' : 'none';
             document.getElementById('leaderLogin').style.display = type === 'leader' ? 'flex' : 'none';
         }
@@ -681,57 +586,41 @@
                 return;
             }
 
-            database.ref('traineePINs/' + memberId).once('value', snapshot => {
-                const storedPIN = snapshot.val();
+            const storedPIN = localStorage.getItem('pin_' + memberId);
 
-                if (!storedPIN && !pin) {
-                    currentUser = trainee;
-                    currentUserType = 'trainee';
-                    document.getElementById('loginSection').style.display = 'none';
-                    document.getElementById('setupPINSection').style.display = 'block';
-                } else if (storedPIN && pin === storedPIN) {
-                    currentUser = trainee;
-                    currentUserType = 'trainee';
-                    document.getElementById('loginSection').style.display = 'none';
-                    document.getElementById('traineeDashboard').classList.add('active');
-                    document.getElementById('traineeDisplayName').textContent = trainee.name;
-                    loadTraineeDashboard();
-                } else {
-                    showError('Incorrect PIN');
-                }
-            });
+            if (!storedPIN && !pin) {
+                currentUser = trainee;
+                currentUserType = 'trainee';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('setupPINSection').style.display = 'block';
+            } else if (storedPIN && pin === storedPIN) {
+                currentUser = trainee;
+                currentUserType = 'trainee';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('traineeDashboard').classList.add('active');
+                document.getElementById('traineeDisplayName').textContent = trainee.name;
+                loadTraineeDashboard();
+            } else {
+                showError('Incorrect PIN');
+            }
         }
 
         function createTraineePIN() {
             const newPIN = document.getElementById('newPIN').value.trim();
             const confirmPIN = document.getElementById('confirmPIN').value.trim();
 
-            if (!newPIN || !confirmPIN) {
-                alert('Please enter both PIN fields');
+            if (newPIN !== confirmPIN || newPIN.length !== 6) {
+                alert('PIN must be 6 digits and match');
                 return;
             }
 
-            if (newPIN !== confirmPIN) {
-                alert('PINs do not match');
-                return;
-            }
+            localStorage.setItem('pin_' + currentUser.memberId, newPIN);
+            localStorage.setItem('progress_' + currentUser.memberId, JSON.stringify({}));
 
-            if (newPIN.length !== 6 || !/^\d{6}$/.test(newPIN)) {
-                alert('PIN must be exactly 6 digits');
-                return;
-            }
-
-            database.ref('traineePINs/' + currentUser.memberId).set(newPIN, (error) => {
-                if (error) {
-                    alert('Error saving PIN');
-                    return;
-                }
-
-                document.getElementById('setupPINSection').style.display = 'none';
-                document.getElementById('traineeDashboard').classList.add('active');
-                document.getElementById('traineeDisplayName').textContent = currentUser.name;
-                loadTraineeDashboard();
-            });
+            document.getElementById('setupPINSection').style.display = 'none';
+            document.getElementById('traineeDashboard').classList.add('active');
+            document.getElementById('traineeDisplayName').textContent = currentUser.name;
+            loadTraineeDashboard();
         }
 
         function loginLeader() {
@@ -743,118 +632,95 @@
                 return;
             }
 
-            database.ref('leaderPasswords/' + memberId).once('value', snapshot => {
-                const storedPassword = snapshot.val();
+            const storedPassword = localStorage.getItem('password_' + memberId);
 
-                if (!storedPassword && !password) {
-                    currentUser = { memberId: memberId, name: 'Leader' };
-                    currentUserType = 'leader';
-                    document.getElementById('loginSection').style.display = 'none';
-                    document.getElementById('setupPasswordSection').style.display = 'block';
-                } else if (storedPassword && password === storedPassword) {
-                    currentUser = { memberId: memberId, name: 'Leader' };
-                    currentUserType = 'leader';
-                    document.getElementById('loginSection').style.display = 'none';
-                    document.getElementById('leaderDashboard').classList.add('active');
-                    document.getElementById('leaderDisplayName').textContent = memberId;
-                    loadLeaderDashboard();
-                } else {
-                    showError('Incorrect password');
-                }
-            });
+            if (!storedPassword && !password) {
+                currentUser = { memberId: memberId, name: 'Leader' };
+                currentUserType = 'leader';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('setupPasswordSection').style.display = 'block';
+            } else if (storedPassword && password === storedPassword) {
+                currentUser = { memberId: memberId, name: 'Leader' };
+                currentUserType = 'leader';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('leaderDashboard').classList.add('active');
+                document.getElementById('leaderDisplayName').textContent = memberId;
+                loadLeaderDashboard();
+            } else {
+                showError('Incorrect password');
+            }
         }
 
         function createLeaderPassword() {
             const newPassword = document.getElementById('newPassword').value.trim();
             const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-            if (!newPassword || !confirmPassword) {
-                alert('Please enter both password fields');
+            if (newPassword !== confirmPassword || newPassword.length < 6) {
+                alert('Passwords must match and be 6+ characters');
                 return;
             }
 
-            if (newPassword !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
+            localStorage.setItem('password_' + currentUser.memberId, newPassword);
 
-            if (newPassword.length < 6) {
-                alert('Password must be at least 6 characters');
-                return;
-            }
-
-            database.ref('leaderPasswords/' + currentUser.memberId).set(newPassword, (error) => {
-                if (error) {
-                    alert('Error saving password');
-                    return;
-                }
-
-                document.getElementById('setupPasswordSection').style.display = 'none';
-                document.getElementById('leaderDashboard').classList.add('active');
-                document.getElementById('leaderDisplayName').textContent = currentUser.memberId;
-                loadLeaderDashboard();
-            });
+            document.getElementById('setupPasswordSection').style.display = 'none';
+            document.getElementById('leaderDashboard').classList.add('active');
+            document.getElementById('leaderDisplayName').textContent = currentUser.memberId;
+            loadLeaderDashboard();
         }
 
         function loadTraineeDashboard() {
             const memberId = currentUser.memberId;
 
-            const sections = ['setup', 'training', 'records', 'uniforms', 'final'];
-            sections.forEach(section => {
+            ['setup', 'training', 'records', 'uniforms', 'final'].forEach(section => {
                 const items = CHECKLIST.filter(item => item.section === section);
                 const sectionName = section === 'uniforms' ? 'Uniforms' : section.charAt(0).toUpperCase() + section.slice(1);
                 const sectionId = 'traineeSection' + sectionName;
                 
                 let html = '';
                 items.forEach(item => {
-                    html += `
-                        <div class="checklist-item" id="item-${item.id}">
-                            <input type="checkbox" id="${item.id}" onchange="updateProgress('${item.id}', this.checked)">
-                            <label for="${item.id}">${item.label}</label>
-                        </div>
-                    `;
+                    html += `<div class="checklist-item" id="item-${item.id}"><input type="checkbox" id="${item.id}" onchange="updateProgress('${item.id}', this.checked)"><label for="${item.id}">${item.label}</label></div>`;
                 });
                 
                 document.getElementById(sectionId).innerHTML = html;
             });
 
-            database.ref('progress/' + memberId).once('value', snapshot => {
-                const progress = snapshot.val() || {};
-                
-                Object.keys(progress).forEach(itemId => {
-                    const checkbox = document.getElementById(itemId);
-                    if (checkbox && progress[itemId]) {
-                        checkbox.checked = true;
-                        document.getElementById('item-' + itemId).classList.add('completed');
-                    }
-                });
-
-                updateProgressDisplay();
+            const progress = JSON.parse(localStorage.getItem('progress_' + memberId) || '{}');
+            Object.keys(progress).forEach(itemId => {
+                const checkbox = document.getElementById(itemId);
+                if (checkbox && progress[itemId]) {
+                    checkbox.checked = true;
+                    document.getElementById('item-' + itemId).classList.add('completed');
+                }
             });
 
+            updateProgressDisplay();
             loadLeaderboard();
         }
 
         function updateProgress(itemId, checked) {
             const memberId = currentUser.memberId;
-            database.ref('progress/' + memberId + '/' + itemId).set(checked ? true : null, () => {
-                document.getElementById('item-' + itemId).classList.toggle('completed');
-                updateProgressDisplay();
-                loadLeaderboard();
-            });
+            const progress = JSON.parse(localStorage.getItem('progress_' + memberId) || '{}');
+            
+            if (checked) {
+                progress[itemId] = true;
+            } else {
+                delete progress[itemId];
+            }
+            
+            localStorage.setItem('progress_' + memberId, JSON.stringify(progress));
+            document.getElementById('item-' + itemId).classList.toggle('completed');
+            updateProgressDisplay();
+            loadLeaderboard();
         }
 
         function updateProgressDisplay() {
             const memberId = currentUser.memberId;
-            database.ref('progress/' + memberId).once('value', snapshot => {
-                const progress = snapshot.val() || {};
-                const completed = Object.values(progress).filter(v => v).length;
-                const total = CHECKLIST.length;
-                const percent = Math.round((completed / total) * 100);
+            const progress = JSON.parse(localStorage.getItem('progress_' + memberId) || '{}');
+            const completed = Object.keys(progress).length;
+            const total = CHECKLIST.length;
+            const percent = Math.round((completed / total) * 100);
 
-                document.getElementById('yourProgress').textContent = percent + '%';
-                document.getElementById('daysRemaining').textContent = Math.max(0, 90);
-            });
+            document.getElementById('yourProgress').textContent = percent + '%';
         }
 
         function loadLeaderboard() {
@@ -862,31 +728,28 @@
             if (!leaderboardDiv) return;
 
             const leaderboard = [];
-            let loaded = 0;
 
             TRAINEES.forEach(trainee => {
-                database.ref('progress/' + trainee.memberId).once('value', snapshot => {
-                    const progress = snapshot.val() || {};
-                    const completed = Object.values(progress).filter(v => v).length;
-                    const total = CHECKLIST.length;
-                    const percent = Math.round((completed / total) * 100);
+                const progress = JSON.parse(localStorage.getItem('progress_' + trainee.memberId) || '{}');
+                const completed = Object.keys(progress).length;
+                const total = CHECKLIST.length;
+                const percent = Math.round((completed / total) * 100);
 
-                    leaderboard.push({ ...trainee, progress: percent });
-                    loaded++;
-
-                    if (loaded === TRAINEES.length) {
-                        leaderboard.sort((a, b) => b.progress - a.progress);
-
-                        let html = '<ol style="list-style-position: inside;">';
-                        leaderboard.forEach((trainee, index) => {
-                            html += `<li style="margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;"><strong>${index + 1}. ${trainee.name}</strong> - ${trainee.progress}%</li>`;
-                        });
-                        html += '</ol>';
-
-                        leaderboardDiv.innerHTML = html;
-                    }
-                });
+                leaderboard.push({ ...trainee, progress: percent });
             });
+
+            leaderboard.sort((a, b) => b.progress - a.progress);
+
+            let html = '<ol style="list-style-position: inside;">';
+            leaderboard.forEach((trainee, index) => {
+                html += `<li style="margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;"><strong>${index + 1}. ${trainee.name}</strong> - ${trainee.progress}%</li>`;
+            });
+            html += '</ol>';
+
+            leaderboardDiv.innerHTML = html;
+
+            const avg = Math.round(leaderboard.reduce((sum, t) => sum + t.progress, 0) / leaderboard.length) || 0;
+            document.getElementById('groupAverage').textContent = avg + '%';
         }
 
         function loadLeaderDashboard() {
@@ -894,97 +757,35 @@
             grid.innerHTML = '';
 
             let leaderboard = [];
-            let loaded = 0;
 
             TRAINEES.forEach(trainee => {
-                database.ref('progress/' + trainee.memberId).once('value', snapshot => {
-                    const progress = snapshot.val() || {};
-                    const completed = Object.values(progress).filter(v => v).length;
-                    const total = CHECKLIST.length;
-                    const percent = Math.round((completed / total) * 100);
-
-                    leaderboard.push({ ...trainee, progress: percent, completed, total });
-                    loaded++;
-
-                    if (loaded === TRAINEES.length) {
-                        const onTrack = leaderboard.filter(t => t.progress >= 70).length;
-                        const atRisk = leaderboard.filter(t => t.progress >= 30 && t.progress < 70).length;
-                        const needsAttention = leaderboard.filter(t => t.progress < 30).length;
-                        const avg = Math.round(leaderboard.reduce((sum, t) => sum + t.progress, 0) / leaderboard.length) || 0;
-
-                        document.getElementById('onTrackCount').textContent = onTrack;
-                        document.getElementById('atRiskCount').textContent = atRisk;
-                        document.getElementById('needsAttentionCount').textContent = needsAttention;
-                        document.getElementById('groupAverageLeader').textContent = avg + '%';
-
-                        grid.innerHTML = '';
-                        leaderboard.forEach(t => {
-                            const status = t.progress >= 70 ? 'green' : t.progress >= 30 ? 'yellow' : 'red';
-                            const statusText = t.progress >= 70 ? 'On Track' : t.progress >= 30 ? 'At Risk' : 'Needs Attention';
-
-                            const card = document.createElement('div');
-                            card.className = `admin-card ${status}`;
-                            card.innerHTML = `
-                                <div class="admin-card-name">${t.name}</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill ${status}" style="width: ${t.progress}%">${t.progress}%</div>
-                                </div>
-                                <div class="admin-card-status status-${status}">${statusText}</div>
-                                <div class="detail-hint">Click to see details →</div>
-                            `;
-                            card.style.cursor = 'pointer';
-                            card.onclick = () => viewTraineeDetails(t.memberId);
-                            grid.appendChild(card);
-                        });
-                    }
-                });
-            });
-        }
-
-        function viewTraineeDetails(memberId) {
-            const trainee = TRAINEES.find(t => t.memberId === memberId);
-            if (!trainee) return;
-
-            database.ref('progress/' + memberId).once('value', snapshot => {
-                const progress = snapshot.val() || {};
-                const completed = Object.values(progress).filter(v => v).length;
+                const progress = JSON.parse(localStorage.getItem('progress_' + trainee.memberId) || '{}');
+                const completed = Object.keys(progress).length;
                 const total = CHECKLIST.length;
                 const percent = Math.round((completed / total) * 100);
 
-                document.getElementById('modalTraineeName').textContent = trainee.name + ' (ID: ' + memberId + ')';
-                document.getElementById('modalTotalProgress').textContent = percent + '%';
-
-                const sections = [
-                    { name: '🚀 Setup', items: CHECKLIST.filter(i => i.section === 'setup') },
-                    { name: '📚 Training', items: CHECKLIST.filter(i => i.section === 'training') },
-                    { name: '📊 Records', items: CHECKLIST.filter(i => i.section === 'records') },
-                    { name: '👕 Uniforms', items: CHECKLIST.filter(i => i.section === 'uniforms') },
-                    { name: '🎯 BQ Completion', items: CHECKLIST.filter(i => i.section === 'final') }
-                ];
-
-                let html = '';
-                sections.forEach(section => {
-                    let sectionCompleted = 0;
-                    let sectionHtml = `<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;"><h3 style="color: #1e3c72; margin-bottom: 15px;">${section.name}</h3>`;
-                    
-                    section.items.forEach(item => {
-                        const isCompleted = progress[item.id];
-                        if (isCompleted) sectionCompleted++;
-                        sectionHtml += `<div style="padding: 8px; margin-bottom: 8px; background: ${isCompleted ? '#d4edda' : '#fff'}; border-radius: 4px; border-left: 4px solid ${isCompleted ? '#28a745' : '#dee2e6'};"><span style="color: ${isCompleted ? '#28a745' : '#999'};">${isCompleted ? '✅' : '⭕'}</span> ${item.label}</div>`;
-                    });
-                    
-                    const sectionPercent = Math.round((sectionCompleted / section.items.length) * 100);
-                    sectionHtml += `<div style="margin-top: 10px; padding: 10px; background: #e9ecef; border-radius: 4px; text-align: center; font-weight: bold; color: #495057;">${sectionCompleted}/${section.items.length} (${sectionPercent}%)</div></div>`;
-                    html += sectionHtml;
-                });
-
-                document.getElementById('modalSections').innerHTML = html;
-                document.getElementById('detailModal').classList.add('active');
+                leaderboard.push({ ...trainee, progress: percent, completed, total });
             });
-        }
 
-        function closeDetailModal() {
-            document.getElementById('detailModal').classList.remove('active');
+            const onTrack = leaderboard.filter(t => t.progress >= 70).length;
+            const atRisk = leaderboard.filter(t => t.progress >= 30 && t.progress < 70).length;
+            const needsAttention = leaderboard.filter(t => t.progress < 30).length;
+            const avg = Math.round(leaderboard.reduce((sum, t) => sum + t.progress, 0) / leaderboard.length) || 0;
+
+            document.getElementById('onTrackCount').textContent = onTrack;
+            document.getElementById('atRiskCount').textContent = atRisk;
+            document.getElementById('needsAttentionCount').textContent = needsAttention;
+            document.getElementById('groupAverageLeader').textContent = avg + '%';
+
+            leaderboard.forEach(t => {
+                const status = t.progress >= 70 ? 'green' : t.progress >= 30 ? 'yellow' : 'red';
+                const statusText = t.progress >= 70 ? 'On Track' : t.progress >= 30 ? 'At Risk' : 'Needs Attention';
+
+                const card = document.createElement('div');
+                card.className = `admin-card ${status}`;
+                card.innerHTML = `<div class="admin-card-name">${t.name}</div><div class="progress-bar"><div class="progress-fill ${status}" style="width: ${t.progress}%">${t.progress}%</div></div><div class="admin-card-status status-${status}">${statusText}</div><div class="detail-hint">Click for details →</div>`;
+                grid.appendChild(card);
+            });
         }
 
         function logout() {
@@ -993,16 +794,7 @@
             document.getElementById('traineeDashboard').classList.remove('active');
             document.getElementById('leaderDashboard').classList.remove('active');
             document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('setupPINSection').style.display = 'none';
-            document.getElementById('setupPasswordSection').style.display = 'none';
-            document.getElementById('traineeId').value = '';
-            document.getElementById('traineePIN').value = '';
-            document.getElementById('leaderId').value = '';
-            document.getElementById('leaderPassword').value = '';
-            document.getElementById('newPIN').value = '';
-            document.getElementById('confirmPIN').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
+            document.querySelectorAll('input').forEach(inp => inp.value = '');
             selectLoginType('trainee');
         }
 
