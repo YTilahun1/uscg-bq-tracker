@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
@@ -18,13 +17,11 @@
             line-height: 1.6;
             min-height: 100vh;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-
         .header {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -33,13 +30,11 @@
             text-align: center;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-
         .header h1 {
             color: #1e3c72;
             font-size: 2rem;
             margin-bottom: 10px;
         }
-
         .login-section {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -48,7 +43,6 @@
             max-width: 500px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-
         .login-instructions {
             background: #e7f3ff;
             border: 1px solid #b3d9ff;
@@ -57,13 +51,11 @@
             margin-bottom: 20px;
             color: #0056b3;
         }
-
         .login-type-selector {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-
         .type-button {
             flex: 1;
             padding: 12px;
@@ -74,26 +66,22 @@
             font-weight: bold;
             transition: all 0.3s;
         }
-
         .type-button.active {
             border-color: #dc3545;
             background: #dc3545;
             color: white;
         }
-
         .login-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
         .login-form input {
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
         }
-
         .login-form button {
             padding: 12px;
             background: #dc3545;
@@ -105,11 +93,9 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-
         .login-form button:hover {
             background: #c82333;
         }
-
         .error-message {
             background: #f8d7da;
             color: #721c24;
@@ -118,11 +104,9 @@
             margin-top: 10px;
             display: none;
         }
-
         .error-message.show {
             display: block;
         }
-
         .setup-password {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -132,25 +116,21 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-
         .setup-password h2 {
             color: #1e3c72;
             margin-bottom: 20px;
         }
-
         .setup-password-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
         .setup-password-form input {
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
         }
-
         .setup-password-form button {
             padding: 12px;
             background: #28a745;
@@ -161,15 +141,12 @@
             font-weight: bold;
             cursor: pointer;
         }
-
         .dashboard {
             display: none;
         }
-
         .dashboard.active {
             display: block;
         }
-
         .dashboard-header {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -180,12 +157,10 @@
             align-items: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-
         .dashboard-header h2 {
             color: #1e3c72;
             margin: 0;
         }
-
         .logout-btn {
             background: #6c757d;
             color: white;
@@ -195,11 +170,9 @@
             cursor: pointer;
             font-weight: bold;
         }
-
         .logout-btn:hover {
             background: #5a6268;
         }
-
         .checklist-item {
             display: flex;
             align-items: flex-start;
@@ -209,25 +182,21 @@
             border-radius: 8px;
             border-left: 4px solid #6c757d;
         }
-
         .checklist-item.completed {
             background: #d4edda;
             border-left-color: #28a745;
         }
-
         .checklist-item input[type="checkbox"] {
             margin-right: 15px;
             transform: scale(1.2);
             cursor: pointer;
             margin-top: 2px;
         }
-
         .checklist-item label {
             flex: 1;
             cursor: pointer;
             font-weight: 500;
         }
-
         .progress-bar {
             width: 100%;
             height: 10px;
@@ -236,7 +205,6 @@
             overflow: hidden;
             margin: 10px 0;
         }
-
         .progress-fill {
             height: 100%;
             background: #6c757d;
@@ -248,27 +216,22 @@
             font-size: 0.75rem;
             font-weight: bold;
         }
-
         .progress-fill.green {
             background: #28a745;
         }
-
         .progress-fill.yellow {
             background: #ffc107;
             color: black;
         }
-
         .progress-fill.red {
             background: #dc3545;
         }
-
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
-
         .admin-card {
             background: rgba(255, 255, 255, 0.95);
             padding: 20px;
@@ -278,30 +241,24 @@
             transition: transform 0.3s;
             border-top: 4px solid #6c757d;
         }
-
         .admin-card:hover {
             transform: translateY(-5px);
         }
-
         .admin-card.green {
             border-top-color: #28a745;
         }
-
         .admin-card.yellow {
             border-top-color: #ffc107;
         }
-
         .admin-card.red {
             border-top-color: #dc3545;
         }
-
         .admin-card-name {
             font-weight: bold;
             color: #1e3c72;
             margin-bottom: 10px;
             font-size: 1.1rem;
         }
-
         .admin-card-status {
             margin-top: 10px;
             padding: 8px;
@@ -310,61 +267,94 @@
             font-weight: bold;
             font-size: 0.9rem;
         }
-
         .admin-card-status.status-green {
             background: #d4edda;
             color: #155724;
         }
-
         .admin-card-status.status-yellow {
             background: #fff3cd;
             color: #856404;
         }
-
         .admin-card-status.status-red {
             background: #f8d7da;
             color: #721c24;
         }
-
         .detail-hint {
             text-align: center;
             color: #666;
             font-size: 0.85rem;
             margin-top: 10px;
         }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
-
         .stat-card {
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
             text-align: center;
         }
-
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
             color: #dc3545;
         }
-
         .stat-label {
             color: #666;
             font-size: 0.9rem;
             margin-top: 5px;
         }
-
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-header h2 {
+            color: #1e3c72;
+            margin: 0;
+        }
+        .close-modal-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
         @media (max-width: 768px) {
             .dashboard-header {
                 flex-direction: column;
                 gap: 15px;
             }
-
             .admin-grid {
                 grid-template-columns: 1fr;
             }
@@ -373,39 +363,31 @@
 </head>
 <body>
     <div class="container">
-        <!-- LOGIN SECTION -->
         <div id="loginSection" class="login-section">
             <div class="header">
                 <h1>🇺🇸 USCG Auxiliary BQ Progress Tracker</h1>
             </div>
-
             <div class="login-instructions">
                 <h3>📋 First Time Login?</h3>
                 <p><strong>Simply enter your Member ID and click Login.</strong><br>
                 On your first login, you'll be prompted to create a secure PIN (trainees) or password (leaders).</p>
             </div>
-
             <div class="login-type-selector">
                 <button class="type-button active" onclick="selectLoginType('trainee')">Trainee Login</button>
                 <button class="type-button" onclick="selectLoginType('leader')">Leader Login</button>
             </div>
-
             <div id="traineeLogin" class="login-form">
                 <input type="text" id="traineeId" placeholder="Enter Your Member ID" maxlength="10">
                 <input type="password" id="traineePIN" placeholder="Enter Your PIN (or leave blank first login)" maxlength="6">
                 <button onclick="loginTrainee()">Login</button>
             </div>
-
             <div id="leaderLogin" class="login-form" style="display: none;">
                 <input type="text" id="leaderId" placeholder="Enter Your Member ID" maxlength="10">
                 <input type="password" id="leaderPassword" placeholder="Enter Your Password (or leave blank first login)">
                 <button onclick="loginLeader()">Login</button>
             </div>
-
             <div id="errorMessage" class="error-message"></div>
         </div>
-
-        <!-- SETUP PIN SECTION -->
         <div id="setupPINSection" class="setup-password" style="display: none;">
             <h2>Welcome! Create Your 6-Digit PIN</h2>
             <div class="setup-password-form">
@@ -415,8 +397,6 @@
                 <button onclick="createTraineePIN()">Create PIN</button>
             </div>
         </div>
-
-        <!-- SETUP PASSWORD SECTION -->
         <div id="setupPasswordSection" class="setup-password" style="display: none;">
             <h2>Welcome! Create Your Password</h2>
             <div class="setup-password-form">
@@ -426,14 +406,11 @@
                 <button onclick="createLeaderPassword()">Create Password</button>
             </div>
         </div>
-
-        <!-- TRAINEE DASHBOARD -->
         <div id="traineeDashboard" class="dashboard">
             <div class="dashboard-header">
                 <h2>Welcome, <span id="traineeDisplayName"></span>! 👋</h2>
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
-
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value" id="yourProgress">0%</div>
@@ -452,39 +429,29 @@
                     <div class="stat-label">Your Rank</div>
                 </div>
             </div>
-
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px; margin-bottom: 20px;">
                 <h3 style="color: #1e3c72; margin-bottom: 15px;">📋 Your BQ Checklist</h3>
-                
                 <h4 style="color: #495057; margin: 20px 0 10px 0;">🚀 Setup Phase</h4>
                 <div id="traineeSectionSetup"></div>
-
                 <h4 style="color: #495057; margin: 20px 0 10px 0;">📚 Training</h4>
                 <div id="traineeSectionTraining"></div>
-
                 <h4 style="color: #495057; margin: 20px 0 10px 0;">📊 Records Management</h4>
                 <div id="traineeSectionRecords"></div>
-
                 <h4 style="color: #495057; margin: 20px 0 10px 0;">👕 Uniforms</h4>
                 <div id="traineeSectionUniforms"></div>
-
                 <h4 style="color: #495057; margin: 20px 0 10px 0;">🎯 BQ Completion</h4>
                 <div id="traineeSectionFinal"></div>
             </div>
-
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px;">
                 <h3 style="color: #1e3c72; margin-bottom: 15px;">🏆 Leaderboard</h3>
                 <div id="leaderboard"></div>
             </div>
         </div>
-
-        <!-- LEADER DASHBOARD -->
         <div id="leaderDashboard" class="dashboard">
             <div class="dashboard-header">
                 <h2>Leader Dashboard - <span id="leaderDisplayName"></span> 👨‍💼</h2>
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
-
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value" id="onTrackCount">0</div>
@@ -503,14 +470,21 @@
                     <div class="stat-label">Group Average</div>
                 </div>
             </div>
-
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px;">
-                <h2 style="color: #1e3c72; margin-bottom: 20px;">All Trainees Status</h2>
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">All Trainees Status (Click a name to see details)</h2>
                 <div class="admin-grid" id="adminGrid"></div>
+            </div>
+            <div id="detailModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalTraineeName"></h2>
+                        <button class="close-modal-btn" onclick="closeDetailModal()">Close</button>
+                    </div>
+                    <div id="modalContent"></div>
+                </div>
             </div>
         </div>
     </div>
-
     <script>
         const TRAINEES = [
             { memberId: '5009810', name: 'Jessica Arciero' },
@@ -529,7 +503,6 @@
             { memberId: '5009878', name: 'Patrick Maguire' },
             { memberId: '5009879', name: 'Nauzer Gotla' }
         ];
-
         const CHECKLIST = [
             { id: 'setup1', section: 'setup', label: 'Secure welcome letter' },
             { id: 'setup2', section: 'setup', label: 'Save Member ID and Flotilla Number' },
@@ -560,34 +533,27 @@
             { id: 'final3', section: 'final', label: 'Confirm uniform inspection' },
             { id: 'final4', section: 'final', label: 'Apply for Auxiliary ID card' }
         ];
-
         let currentUser = null;
         let currentUserType = null;
-
         function selectLoginType(type) {
             document.querySelectorAll('.type-button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById('traineeLogin').style.display = type === 'trainee' ? 'flex' : 'none';
             document.getElementById('leaderLogin').style.display = type === 'leader' ? 'flex' : 'none';
         }
-
         function loginTrainee() {
             const memberId = document.getElementById('traineeId').value.trim();
             const pin = document.getElementById('traineePIN').value.trim();
-
             if (!memberId) {
                 showError('Please enter your Member ID');
                 return;
             }
-
             const trainee = TRAINEES.find(t => t.memberId === memberId);
             if (!trainee) {
                 showError('Member ID not found');
                 return;
             }
-
             const storedPIN = localStorage.getItem('pin_' + memberId);
-
             if (!storedPIN && !pin) {
                 currentUser = trainee;
                 currentUserType = 'trainee';
@@ -604,36 +570,28 @@
                 showError('Incorrect PIN');
             }
         }
-
         function createTraineePIN() {
             const newPIN = document.getElementById('newPIN').value.trim();
             const confirmPIN = document.getElementById('confirmPIN').value.trim();
-
             if (newPIN !== confirmPIN || newPIN.length !== 6) {
                 alert('PIN must be 6 digits and match');
                 return;
             }
-
             localStorage.setItem('pin_' + currentUser.memberId, newPIN);
             localStorage.setItem('progress_' + currentUser.memberId, JSON.stringify({}));
-
             document.getElementById('setupPINSection').style.display = 'none';
             document.getElementById('traineeDashboard').classList.add('active');
             document.getElementById('traineeDisplayName').textContent = currentUser.name;
             loadTraineeDashboard();
         }
-
         function loginLeader() {
             const memberId = document.getElementById('leaderId').value.trim();
             const password = document.getElementById('leaderPassword').value.trim();
-
             if (!memberId) {
                 showError('Please enter your Member ID');
                 return;
             }
-
             const storedPassword = localStorage.getItem('password_' + memberId);
-
             if (!storedPassword && !password) {
                 currentUser = { memberId: memberId, name: 'Leader' };
                 currentUserType = 'leader';
@@ -650,40 +608,31 @@
                 showError('Incorrect password');
             }
         }
-
         function createLeaderPassword() {
             const newPassword = document.getElementById('newPassword').value.trim();
             const confirmPassword = document.getElementById('confirmPassword').value.trim();
-
             if (newPassword !== confirmPassword || newPassword.length < 6) {
                 alert('Passwords must match and be 6+ characters');
                 return;
             }
-
             localStorage.setItem('password_' + currentUser.memberId, newPassword);
-
             document.getElementById('setupPasswordSection').style.display = 'none';
             document.getElementById('leaderDashboard').classList.add('active');
             document.getElementById('leaderDisplayName').textContent = currentUser.memberId;
             loadLeaderDashboard();
         }
-
         function loadTraineeDashboard() {
             const memberId = currentUser.memberId;
-
             ['setup', 'training', 'records', 'uniforms', 'final'].forEach(section => {
                 const items = CHECKLIST.filter(item => item.section === section);
                 const sectionName = section === 'uniforms' ? 'Uniforms' : section.charAt(0).toUpperCase() + section.slice(1);
                 const sectionId = 'traineeSection' + sectionName;
-                
                 let html = '';
                 items.forEach(item => {
-                    html += `<div class="checklist-item" id="item-${item.id}"><input type="checkbox" id="${item.id}" onchange="updateProgress('${item.id}', this.checked)"><label for="${item.id}">${item.label}</label></div>`;
+                    html += '<div class="checklist-item" id="item-' + item.id + '"><input type="checkbox" id="' + item.id + '" onchange="updateProgress(\'' + item.id + '\', this.checked)"><label for="' + item.id + '">' + item.label + '</label></div>';
                 });
-                
                 document.getElementById(sectionId).innerHTML = html;
             });
-
             const progress = JSON.parse(localStorage.getItem('progress_' + memberId) || '{}');
             Object.keys(progress).forEach(itemId => {
                 const checkbox = document.getElementById(itemId);
@@ -692,102 +641,113 @@
                     document.getElementById('item-' + itemId).classList.add('completed');
                 }
             });
-
             updateProgressDisplay();
             loadLeaderboard();
         }
-
         function updateProgress(itemId, checked) {
             const memberId = currentUser.memberId;
             const progress = JSON.parse(localStorage.getItem('progress_' + memberId) || '{}');
-            
             if (checked) {
                 progress[itemId] = true;
             } else {
                 delete progress[itemId];
             }
-            
             localStorage.setItem('progress_' + memberId, JSON.stringify(progress));
             document.getElementById('item-' + itemId).classList.toggle('completed');
             updateProgressDisplay();
             loadLeaderboard();
         }
-
         function updateProgressDisplay() {
             const memberId = currentUser.memberId;
             const progress = JSON.parse(localStorage.getItem('progress_' + memberId) || '{}');
             const completed = Object.keys(progress).length;
             const total = CHECKLIST.length;
             const percent = Math.round((completed / total) * 100);
-
             document.getElementById('yourProgress').textContent = percent + '%';
         }
-
         function loadLeaderboard() {
             const leaderboardDiv = document.getElementById('leaderboard');
             if (!leaderboardDiv) return;
-
             const leaderboard = [];
-
             TRAINEES.forEach(trainee => {
                 const progress = JSON.parse(localStorage.getItem('progress_' + trainee.memberId) || '{}');
                 const completed = Object.keys(progress).length;
                 const total = CHECKLIST.length;
                 const percent = Math.round((completed / total) * 100);
-
                 leaderboard.push({ ...trainee, progress: percent });
             });
-
             leaderboard.sort((a, b) => b.progress - a.progress);
-
             let html = '<ol style="list-style-position: inside;">';
             leaderboard.forEach((trainee, index) => {
-                html += `<li style="margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;"><strong>${index + 1}. ${trainee.name}</strong> - ${trainee.progress}%</li>`;
+                html += '<li style="margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px;"><strong>' + (index + 1) + '. ' + trainee.name + '</strong> - ' + trainee.progress + '%</li>';
             });
             html += '</ol>';
-
             leaderboardDiv.innerHTML = html;
-
             const avg = Math.round(leaderboard.reduce((sum, t) => sum + t.progress, 0) / leaderboard.length) || 0;
             document.getElementById('groupAverage').textContent = avg + '%';
         }
-
         function loadLeaderDashboard() {
             const grid = document.getElementById('adminGrid');
             grid.innerHTML = '';
-
             let leaderboard = [];
-
             TRAINEES.forEach(trainee => {
                 const progress = JSON.parse(localStorage.getItem('progress_' + trainee.memberId) || '{}');
                 const completed = Object.keys(progress).length;
                 const total = CHECKLIST.length;
                 const percent = Math.round((completed / total) * 100);
-
                 leaderboard.push({ ...trainee, progress: percent, completed, total });
             });
-
             const onTrack = leaderboard.filter(t => t.progress >= 70).length;
             const atRisk = leaderboard.filter(t => t.progress >= 30 && t.progress < 70).length;
             const needsAttention = leaderboard.filter(t => t.progress < 30).length;
             const avg = Math.round(leaderboard.reduce((sum, t) => sum + t.progress, 0) / leaderboard.length) || 0;
-
             document.getElementById('onTrackCount').textContent = onTrack;
             document.getElementById('atRiskCount').textContent = atRisk;
             document.getElementById('needsAttentionCount').textContent = needsAttention;
             document.getElementById('groupAverageLeader').textContent = avg + '%';
-
             leaderboard.forEach(t => {
                 const status = t.progress >= 70 ? 'green' : t.progress >= 30 ? 'yellow' : 'red';
                 const statusText = t.progress >= 70 ? 'On Track' : t.progress >= 30 ? 'At Risk' : 'Needs Attention';
-
                 const card = document.createElement('div');
-                card.className = `admin-card ${status}`;
-                card.innerHTML = `<div class="admin-card-name">${t.name}</div><div class="progress-bar"><div class="progress-fill ${status}" style="width: ${t.progress}%">${t.progress}%</div></div><div class="admin-card-status status-${status}">${statusText}</div><div class="detail-hint">Click for details →</div>`;
+                card.className = 'admin-card ' + status;
+                card.innerHTML = '<div class="admin-card-name">' + t.name + '</div><div class="progress-bar"><div class="progress-fill ' + status + '" style="width: ' + t.progress + '%">' + t.progress + '%</div></div><div class="admin-card-status status-' + status + '">' + statusText + '</div><div class="detail-hint">Click for details →</div>';
+                card.style.cursor = 'pointer';
+                card.onclick = function() { viewTraineeDetails(t.memberId); };
                 grid.appendChild(card);
             });
         }
-
+        function viewTraineeDetails(memberId) {
+            const trainee = TRAINEES.find(t => t.memberId === memberId);
+            if (!trainee) return;
+            const progress = JSON.parse(localStorage.getItem('progress_' + memberId) || '{}');
+            const completed = Object.keys(progress).length;
+            const total = CHECKLIST.length;
+            const percent = Math.round((completed / total) * 100);
+            document.getElementById('modalTraineeName').textContent = trainee.name + ' (ID: ' + memberId + ')';
+            const sections = [
+                { name: '🚀 Setup', items: CHECKLIST.filter(i => i.section === 'setup') },
+                { name: '📚 Training', items: CHECKLIST.filter(i => i.section === 'training') },
+                { name: '📊 Records', items: CHECKLIST.filter(i => i.section === 'records') },
+                { name: '👕 Uniforms', items: CHECKLIST.filter(i => i.section === 'uniforms') },
+                { name: '🎯 BQ Completion', items: CHECKLIST.filter(i => i.section === 'final') }
+            ];
+            let html = '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px;"><div style="font-size: 2.5rem; font-weight: bold; color: #dc3545;">' + percent + '%</div><div style="color: #666;">Overall Progress</div></div>';
+            sections.forEach(section => {
+                const sectionCompleted = section.items.filter(item => progress[item.id]).length;
+                const sectionTotal = section.items.length;
+                html += '<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;"><h3 style="color: #1e3c72; margin-bottom: 15px;">' + section.name + ' (' + sectionCompleted + '/' + sectionTotal + ')</h3>';
+                section.items.forEach(item => {
+                    const isCompleted = progress[item.id];
+                    html += '<div style="padding: 10px; margin-bottom: 8px; background: ' + (isCompleted ? '#d4edda' : '#fff') + '; border-radius: 4px; border-left: 4px solid ' + (isCompleted ? '#28a745' : '#dee2e6') + '; text-align: left;"><span style="color: ' + (isCompleted ? '#28a745' : '#999') + ';">' + (isCompleted ? '✅' : '⭕') + '</span> ' + item.label + '</div>';
+                });
+                html += '</div>';
+            });
+            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('detailModal').classList.add('show');
+        }
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('show');
+        }
         function logout() {
             currentUser = null;
             currentUserType = null;
@@ -797,7 +757,6 @@
             document.querySelectorAll('input').forEach(inp => inp.value = '');
             selectLoginType('trainee');
         }
-
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             errorDiv.textContent = message;
