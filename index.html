@@ -595,4 +595,44 @@
                     </tr>
                 `;
             });
-            document.getElemen
+            document.getElementById('leaderLeaderboard').innerHTML = leaderboardHtml;
+        }
+
+        function viewTraineeDetails(memberId) {
+            const trainee = TRAINEES.find(t => t.memberId === memberId);
+            let html = `<h2>${trainee.name} (${memberId})</h2>`;
+            html += `<div style="text-align: center; margin: 20px 0;"><div style="font-size: 3rem; font-weight: bold; color: #dc3545;">${parseInt(localStorage.getItem(`${memberId}-progress`) || '0')}%</div></div>`;
+
+            for (const [section, items] of Object.entries(BQ_CHECKLIST)) {
+                let completed = 0;
+                items.forEach((_, idx) => {
+                    if (localStorage.getItem(`${memberId}-${section}-${idx}`) === 'true') completed++;
+                });
+                html += `<div class="section-breakdown"><h4>${section.toUpperCase()} (${completed}/${items.length})</h4>`;
+                items.forEach((item, idx) => {
+                    const isChecked = localStorage.getItem(`${memberId}-${section}-${idx}`) === 'true';
+                    html += `<div style="padding: 5px; ${isChecked ? 'color: #28a745;' : ''}">${isChecked ? '✅' : '⭕'} ${item}</div>`;
+                });
+                html += `</div>`;
+            }
+
+            document.getElementById('detailContent').innerHTML = html;
+            document.getElementById('detailModal').classList.add('show');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('show');
+        }
+
+        window.addEventListener('storage', () => {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user) {
+                if (user.type === 'trainee') renderTraineeView();
+                else renderLeaderView();
+            }
+        });
+
+        updateLoginForm();
+    </script>
+</body>
+</html>
