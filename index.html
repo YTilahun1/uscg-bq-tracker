@@ -53,6 +53,19 @@
         .logout-btn:hover {
             background: #c82333;
         }
+        .need-help-btn {
+            background: #ffc107;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .need-help-btn:hover {
+            background: #ffb300;
+        }
         .login-form {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -125,10 +138,10 @@
         .reset-password-link a:hover {
             text-decoration: underline;
         }
-        #loginView, #traineeView, #leaderView, #resetView {
+        #loginView, #traineeView, #leaderView, #resetView, #feedbackView {
             display: none;
         }
-        #loginView.active, #traineeView.active, #leaderView.active, #resetView.active {
+        #loginView.active, #traineeView.active, #leaderView.active, #resetView.active, #feedbackView.active {
             display: block;
         }
         .checklist-item {
@@ -153,6 +166,11 @@
             flex: 1;
             cursor: pointer;
             font-weight: 500;
+        }
+        .checklist-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
         .progress-bar {
             width: 100%;
@@ -275,7 +293,7 @@
             font-weight: bold;
             color: #dc3545;
         }
-        .leaderboard-table {
+        .progress-board-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
@@ -284,22 +302,22 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .leaderboard-table thead {
+        .progress-board-table thead {
             background: linear-gradient(135deg, #dc3545, #c82333);
             color: white;
         }
-        .leaderboard-table th, .leaderboard-table td {
+        .progress-board-table th, .progress-board-table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        .leaderboard-table th {
+        .progress-board-table th {
             font-weight: bold;
         }
-        .leaderboard-table tbody tr:nth-child(odd) {
+        .progress-board-table tbody tr:nth-child(odd) {
             background: #f8f9fa;
         }
-        .leaderboard-table tbody tr:hover {
+        .progress-board-table tbody tr:hover {
             background: #e7f3ff;
         }
         .rank-medal {
@@ -317,6 +335,48 @@
         }
         .back-btn:hover {
             background: #5a6268;
+        }
+        .feedback-form {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .feedback-question {
+            margin-bottom: 20px;
+        }
+        .feedback-question label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        .feedback-question textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            margin: 0;
+        }
+        .radio-group input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -337,7 +397,7 @@
                 </div>
                 <div class="form-group">
                     <label for="memberId">Member ID:</label>
-                    <input type="text" id="memberId" placeholder="Enter your Member ID">
+                    <input type="text" id="memberId" placeholder="Enter your Member ID" onload="loadUsername()">
                 </div>
                 <div class="form-group" id="credentialGroup">
                     <label for="credential" id="credentialLabel">PIN (6 digits):</label>
@@ -380,7 +440,10 @@
             <div class="header">
                 <div class="header-controls">
                     <h1>Your BQ Progress</h1>
-                    <button class="logout-btn" onclick="logout()">Logout</button>
+                    <div>
+                        <button class="need-help-btn" onclick="needHelp()">Need Help?</button>
+                        <button class="logout-btn" onclick="logout()">Logout</button>
+                    </div>
                 </div>
             </div>
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
@@ -389,12 +452,12 @@
                     <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
                 </div>
                 <div id="checklistContainer" style="margin-top: 30px;"></div>
-                <h3 style="margin-top: 40px; color: #1e3c72;">📊 Leaderboard</h3>
-                <table class="leaderboard-table">
+                <h3 style="margin-top: 40px; color: #1e3c72;">📊 Your Progress Board</h3>
+                <table class="progress-board-table">
                     <thead>
                         <tr>
                             <th>Rank</th>
-                            <th>Trainee</th>
+                            <th>Your Position</th>
                             <th>Progress</th>
                         </tr>
                     </thead>
@@ -435,8 +498,8 @@
             </div>
 
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                <h2 style="color: #1e3c72; margin-bottom: 20px;">🏆 Trainee Leaderboard</h2>
-                <table class="leaderboard-table">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">🏆 Progress Board</h2>
+                <table class="progress-board-table">
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -448,6 +511,42 @@
                     </thead>
                     <tbody id="leaderLeaderboard"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <div id="feedbackView">
+            <div class="header">
+                <h1>🎉 Congratulations!</h1>
+                <p>You've completed your BQ requirements!</p>
+            </div>
+            <div class="feedback-form">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">Quick Feedback</h2>
+                <div class="feedback-question">
+                    <label>Did this tracker help you track your progress?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="helpful" value="yes"> Yes, very helpful</label>
+                        <label><input type="radio" name="helpful" value="somewhat"> Somewhat helpful</label>
+                        <label><input type="radio" name="helpful" value="no"> Not helpful</label>
+                    </div>
+                </div>
+                <div class="feedback-question">
+                    <label>Would you use this tracker again for other training?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="useAgain" value="yes"> Yes</label>
+                        <label><input type="radio" name="useAgain" value="maybe"> Maybe</label>
+                        <label><input type="radio" name="useAgain" value="no"> No</label>
+                    </div>
+                </div>
+                <div class="feedback-question">
+                    <label for="comments">Any comments or suggestions?</label>
+                    <textarea id="comments" placeholder="Share your thoughts..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button onclick="submitFeedback()">Submit Feedback</button>
+                </div>
+                <div class="form-group">
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
             </div>
         </div>
 
@@ -482,9 +581,9 @@
 
         const BQ_CHECKLIST = {
             setup: ['Secure welcome letter', 'Save Member ID and Flotilla Number', 'Set up login credentials', 'Confirm account activation', 'Test Moodle access', 'Locate training portal', 'Get enrollment keys', 'System navigation notes'],
-            training: ['California Boater Card', 'Email boater certificate', 'AUXCT CORE Certification', 'Security Fundamentals', 'Privacy Awareness', 'Sexual Harassment Prevention', 'Suicide Prevention', 'Sexual Assault Prevention', 'Civil Rights Awareness', 'Ethics Training', 'FEMA ICS-100', 'FEMA IS-700', 'Email FEMA certificates', 'BQC II Module 1', 'BQC II Module 2', 'BQC II Module 3', 'BQC II Module 4', 'BQC II Module 6', 'BQC II Module 7', 'Bloodborne Pathogens', 'Risk Management', 'Download certificates', 'Training tips noted'],
-            records: ['AUXDATA II access', 'AD2 training', 'Member Records', 'Activity Log', 'My Competencies', 'My Tasks', 'My Awards', 'Verify training records', 'Certificate timeline', 'Follow-up timeline', 'FEMA certificates uploaded', 'Bloodborne Pathogens listed', 'Member information', 'Submit missing certificates'],
-            uniforms: ['Review Uniform Manual', 'Research uniform options', 'Check for donated uniforms', 'ODU Ball Cap', 'Name Tape', 'USCG AUXILIARY Tape', 'ODU Blouse', 'ODU Trousers', 'Blue T-Shirt', 'Riggers Belt', 'ODU Collar Device', 'Ball Cap Device', 'Tactical Boots', 'Black Military Socks', 'Trouser Blousers', 'Dress Shirt', 'Dress Trousers', 'Garrison Cap', 'Auxiliary Belt', 'Name Tag', 'Shoulder Boards', 'Garrison Cap Device', 'Dress Shoes', 'Thin Black Socks', 'Visit CGX Shop', 'Acquire uniform', 'Schedule inspection', 'Pass inspection'],
+            training: ['California Boater Card', 'Email boater certificate to Adam (Flotilla Leader)', 'AUXCT CORE Certification', 'Security Fundamentals', 'Privacy Awareness', 'Sexual Harassment Prevention', 'Suicide Prevention', 'Sexual Assault Prevention', 'Civil Rights Awareness', 'Ethics Training', 'FEMA ICS-100', 'FEMA IS-700', 'Email FEMA certificates to Adam (Flotilla Leader)', 'BQC II Module 1', 'BQC II Module 2', 'BQC II Module 3', 'BQC II Module 4', 'BQC II Module 6', 'BQC II Module 7', 'Bloodborne Pathogens', 'Risk Management', 'Download and save all certificates', 'Training tips noted'],
+            records: ['AUXDATA II access', 'AD2 training', 'Member Records', 'Activity Log', 'My Competencies', 'My Tasks', 'My Awards', 'Verify training records', 'Understand Certificate Timeline (90 days)', 'Understand Follow-up Timeline', 'FEMA certificates uploaded', 'Bloodborne Pathogens listed', 'Member information verified', 'Submit missing certificates if needed'],
+            uniforms: ['Review Uniform Manual', 'Research uniform options', 'Check for donated uniforms', 'ODU Ball Cap', 'Name Tape', 'USCG AUXILIARY Tape', 'ODU Blouse', 'ODU Trousers', 'Blue T-Shirt', 'Riggers Belt', 'ODU Collar Device', 'Ball Cap Device', 'Tactical Boots', 'Black Military Socks', 'Trouser Blousers', 'Dress Shirt', 'Dress Trousers', 'Garrison Cap OR Combination Cap', 'Auxiliary Belt', 'Name Tag', 'Shoulder Boards', 'Garrison Cap Device', 'Dress Shoes', 'Thin Black Socks', 'Visit CGX Shop', 'Acquire uniform', 'Schedule inspection', 'Pass inspection'],
             final: ['Verify training completed', 'Confirm boater certification', 'Confirm uniform inspection', 'Check BQ Status Form', 'Mentor review', 'Request BQ status', 'Apply for ID card', 'BQ status confirmed', 'ID card received']
         };
 
@@ -518,6 +617,8 @@
                 return;
             }
 
+            localStorage.setItem('lastUsername', memberId);
+
             if (currentLoginType === 'trainee') {
                 if (!credential) {
                     alert('Please enter your PIN');
@@ -530,7 +631,6 @@
                 localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'trainee' }));
                 showTraineeView();
             } else {
-                // Leader login - if no password entered, prompt to set one
                 if (!credential) {
                     const newPassword = prompt('No password set. Enter a new password (6+ characters):');
                     if (!newPassword) {
@@ -546,7 +646,6 @@
                     alert('Password set successfully!');
                     showLeaderView();
                 } else {
-                    // Password was entered - verify it
                     if (!LEADER_PASSWORDS[memberId] || LEADER_PASSWORDS[memberId] !== credential) {
                         alert('Invalid Member ID or Password');
                         return;
@@ -562,6 +661,7 @@
             document.getElementById('resetView').classList.remove('active');
             document.getElementById('traineeView').classList.remove('active');
             document.getElementById('leaderView').classList.remove('active');
+            document.getElementById('feedbackView').classList.remove('active');
         }
 
         function showResetView() {
@@ -600,14 +700,22 @@
         function logout() {
             localStorage.removeItem('currentUser');
             showLoginView();
-            document.getElementById('memberId').value = '';
             document.getElementById('credential').value = '';
+            loadUsername();
+        }
+
+        function loadUsername() {
+            const lastUsername = localStorage.getItem('lastUsername');
+            if (lastUsername) {
+                document.getElementById('memberId').value = lastUsername;
+            }
         }
 
         function showTraineeView() {
             document.getElementById('loginView').classList.remove('active');
             document.getElementById('resetView').classList.remove('active');
             document.getElementById('leaderView').classList.remove('active');
+            document.getElementById('feedbackView').classList.remove('active');
             document.getElementById('traineeView').classList.add('active');
             renderTraineeView();
         }
@@ -616,6 +724,7 @@
             document.getElementById('loginView').classList.remove('active');
             document.getElementById('resetView').classList.remove('active');
             document.getElementById('traineeView').classList.remove('active');
+            document.getElementById('feedbackView').classList.remove('active');
             document.getElementById('leaderView').classList.add('active');
             renderLeaderView();
         }
@@ -631,10 +740,14 @@
                 items.forEach((item, idx) => {
                     const itemId = `${user.memberId}-${section}-${idx}`;
                     const isChecked = localStorage.getItem(itemId) === 'true';
+                    let description = '';
+                    if (section === 'records' && item.includes('Competencies')) {
+                        description = '<div class="checklist-description">Log into AUXDATA II and learn to navigate this section. <a href="https://wow.uscgaux.info/content.php?unit=H-DEPT&category=auxiliary-uniforms" target="_blank" style="color: #dc3545;">View training guide</a></div>';
+                    }
                     html += `
                         <div class="checklist-item ${isChecked ? 'completed' : ''}">
                             <input type="checkbox" id="${itemId}" ${isChecked ? 'checked' : ''} onchange="updateProgress()">
-                            <label for="${itemId}">${item}</label>
+                            <label for="${itemId}">${item}${description}</label>
                         </div>
                     `;
                 });
@@ -658,7 +771,12 @@
             document.getElementById('progressFill').style.width = progress + '%';
             document.getElementById('progressFill').textContent = progress + '%';
             localStorage.setItem(`${user.memberId}-progress`, progress);
-            updateLeaderboards();
+
+            if (progress === 100) {
+                showFeedbackView();
+            } else {
+                updateLeaderboards();
+            }
         }
 
         function updateLeaderboards() {
@@ -667,17 +785,22 @@
                 return { ...trainee, progress };
             }).sort((a, b) => b.progress - a.progress);
 
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userRank = leaderboardData.findIndex(t => t.memberId === user.memberId) + 1;
+
             let traineeHtml = '';
             leaderboardData.forEach((t, idx) => {
-                const medals = ['🥇', '🥈', '🥉'];
-                const medal = idx < 3 ? medals[idx] : '';
-                traineeHtml += `
-                    <tr>
-                        <td><span class="rank-medal">${medal}</span>${idx + 1}</td>
-                        <td>${t.name}</td>
-                        <td style="color: #1e3c72; font-weight: bold;">${t.progress}%</td>
-                    </tr>
-                `;
+                if (t.memberId === user.memberId) {
+                    const medals = ['🥇', '🥈', '🥉'];
+                    const medal = idx < 3 ? medals[idx] : '';
+                    traineeHtml += `
+                        <tr style="background: #fff3cd; font-weight: bold;">
+                            <td><span class="rank-medal">${medal}</span>${idx + 1}</td>
+                            <td>You are here</td>
+                            <td style="color: #1e3c72;">${t.progress}%</td>
+                        </tr>
+                    `;
+                }
             });
             document.getElementById('traineeLeaderboard').innerHTML = traineeHtml;
 
@@ -778,12 +901,53 @@
             document.getElementById('detailModal').classList.remove('show');
         }
 
+        function needHelp() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const trainee = TRAINEES.find(t => t.memberId === user.memberId);
+            const message = `Help Request from ${trainee.name} (${user.memberId}). Please reach out to assist with BQ training.`;
+            
+            alert('Your help request has been sent to Yohannes. She will contact you via Slack or email soon.');
+            
+            // Send email (in production, this would be a backend call)
+            console.log('Help request sent:', message);
+        }
+
+        function showFeedbackView() {
+            document.getElementById('traineeView').classList.remove('active');
+            document.getElementById('feedbackView').classList.add('active');
+        }
+
+        function submitFeedback() {
+            const helpful = document.querySelector('input[name="helpful"]:checked')?.value || 'not answered';
+            const useAgain = document.querySelector('input[name="useAgain"]:checked')?.value || 'not answered';
+            const comments = document.getElementById('comments').value || 'no comments';
+            
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const trainee = TRAINEES.find(t => t.memberId === user.memberId);
+            
+            const feedback = {
+                name: trainee.name,
+                memberId: user.memberId,
+                helpful: helpful,
+                useAgain: useAgain,
+                comments: comments,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            alert('Thank you for your feedback! You can now logout.');
+            console.log('Feedback submitted:', feedback);
+        }
+
         window.addEventListener('storage', () => {
             const user = JSON.parse(localStorage.getItem('currentUser'));
             if (user) {
                 if (user.type === 'trainee') renderTraineeView();
                 else renderLeaderView();
             }
+        });
+
+        window.addEventListener('load', () => {
+            loadUsername();
         });
     </script>
 </body>
