@@ -41,8 +41,21 @@
             align-items: center;
             margin-top: 20px;
         }
-        .logout-btn {
-            background: #dc3545;
+        .header-left {
+            flex: 1;
+            text-align: left;
+        }
+        .header-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .user-name {
+            color: #1e3c72;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .logout-btn, .help-btn {
             color: white;
             border: none;
             padding: 10px 20px;
@@ -50,20 +63,17 @@
             cursor: pointer;
             font-weight: bold;
         }
+        .logout-btn {
+            background: #dc3545;
+        }
         .logout-btn:hover {
             background: #c82333;
         }
-        .need-help-btn {
+        .help-btn {
             background: #ffc107;
             color: #333;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-right: 10px;
         }
-        .need-help-btn:hover {
+        .help-btn:hover {
             background: #ffb300;
         }
         .login-form {
@@ -104,12 +114,17 @@
             font-weight: bold;
             color: #1e3c72;
         }
-        .form-group input {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            font-family: Arial, sans-serif;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
         }
         .form-group button {
             width: 100%;
@@ -367,6 +382,7 @@
             display: flex;
             gap: 20px;
             margin-bottom: 10px;
+            flex-wrap: wrap;
         }
         .radio-group label {
             display: flex;
@@ -377,6 +393,14 @@
         .radio-group input[type="radio"] {
             margin-right: 8px;
             cursor: pointer;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
         }
     </style>
 </head>
@@ -439,15 +463,17 @@
         <div id="traineeView">
             <div class="header">
                 <div class="header-controls">
-                    <h1>Your BQ Progress</h1>
-                    <div>
-                        <button class="need-help-btn" onclick="needHelp()">Need Help?</button>
+                    <div class="header-left">
+                        <h1>Your BQ Progress</h1>
+                        <p class="user-name" id="traineeUserName"></p>
+                    </div>
+                    <div class="header-right">
+                        <button class="help-btn" onclick="openHelpModal()">Need Help?</button>
                         <button class="logout-btn" onclick="logout()">Logout</button>
                     </div>
                 </div>
             </div>
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                <h2 id="traineeName" style="color: #1e3c72; margin-bottom: 20px;"></h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
                 </div>
@@ -469,8 +495,14 @@
         <div id="leaderView">
             <div class="header">
                 <div class="header-controls">
-                    <h1>Leadership Dashboard</h1>
-                    <button class="logout-btn" onclick="logout()">Logout</button>
+                    <div class="header-left">
+                        <h1>Leadership Dashboard</h1>
+                        <p class="user-name" id="leaderUserName"></p>
+                    </div>
+                    <div class="header-right">
+                        <button class="help-btn" onclick="openLeaderHelpModal()">Need Help?</button>
+                        <button class="logout-btn" onclick="logout()">Logout</button>
+                    </div>
                 </div>
             </div>
             <div class="stat-cards">
@@ -556,6 +588,61 @@
                 <div id="detailContent"></div>
             </div>
         </div>
+
+        <div id="helpModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal-btn" onclick="closeHelpModal()">&times;</span>
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">📞 Need Help?</h2>
+                <p style="margin-bottom: 20px; color: #666;">Let us know what you need assistance with and we'll get back to you as soon as possible.</p>
+                <div class="form-group">
+                    <label for="helpTopic">What do you need help with?</label>
+                    <select id="helpTopic">
+                        <option value="">-- Select a topic --</option>
+                        <option value="training">Training course issue</option>
+                        <option value="uniform">Uniform shopping/sizing</option>
+                        <option value="records">AUXDATA II navigation</option>
+                        <option value="checklist">Understanding checklist items</option>
+                        <option value="deadline">Deadline question</option>
+                        <option value="certificate">Certificate upload issue</option>
+                        <option value="other">Other - I'll explain below</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="helpDetails">Please describe your issue:</label>
+                    <textarea id="helpDetails" placeholder="Tell us what's going on..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button onclick="submitHelpRequest()">Send Help Request</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="leaderHelpModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal-btn" onclick="closeLeaderHelpModal()">&times;</span>
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">📞 Leader Help Request</h2>
+                <p style="margin-bottom: 20px; color: #666;">Need assistance managing trainees or using the tracker?</p>
+                <div class="form-group">
+                    <label for="leaderHelpTopic">What do you need help with?</label>
+                    <select id="leaderHelpTopic">
+                        <option value="">-- Select a topic --</option>
+                        <option value="tracker">How to use the tracker</option>
+                        <option value="trainee-support">Supporting a trainee</option>
+                        <option value="deadline">Training deadline/requirements</option>
+                        <option value="data">Data interpretation/reports</option>
+                        <option value="technical">Technical issue with tracker</option>
+                        <option value="other">Other - I'll explain below</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="leaderHelpDetails">Please describe your issue:</label>
+                    <textarea id="leaderHelpDetails" placeholder="Tell us what's going on..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button onclick="submitLeaderHelpRequest()">Send Help Request</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -579,6 +666,12 @@
             { memberId: '5009879', name: 'Nauzer Gotla' }
         ];
 
+        const LEADERS = [
+            { memberId: '5009623', name: 'Yohannes Tilahun' },
+            { memberId: '3010789', name: 'Adam Kovalevsky' },
+            { memberId: '3007136', name: 'Adrienne Kuehneman' }
+        ];
+
         const BQ_CHECKLIST = {
             setup: ['Secure welcome letter', 'Save Member ID and Flotilla Number', 'Set up login credentials', 'Confirm account activation', 'Test Moodle access', 'Locate training portal', 'Get enrollment keys', 'System navigation notes'],
             training: ['California Boater Card', 'Email boater certificate to Adam (Flotilla Leader)', 'AUXCT CORE Certification', 'Security Fundamentals', 'Privacy Awareness', 'Sexual Harassment Prevention', 'Suicide Prevention', 'Sexual Assault Prevention', 'Civil Rights Awareness', 'Ethics Training', 'FEMA ICS-100', 'FEMA IS-700', 'Email FEMA certificates to Adam (Flotilla Leader)', 'BQC II Module 1', 'BQC II Module 2', 'BQC II Module 3', 'BQC II Module 4', 'BQC II Module 6', 'BQC II Module 7', 'Bloodborne Pathogens', 'Risk Management', 'Download and save all certificates', 'Training tips noted'],
@@ -590,6 +683,8 @@
         const LEADER_PASSWORDS = {
             '5009623': '116511'
         };
+
+        const HELP_REQUESTS = [];
 
         function setLoginType(type) {
             currentLoginType = type;
@@ -732,7 +827,7 @@
         function renderTraineeView() {
             const user = JSON.parse(localStorage.getItem('currentUser'));
             const trainee = TRAINEES.find(t => t.memberId === user.memberId);
-            document.getElementById('traineeName').textContent = trainee.name + ' (' + trainee.memberId + ')';
+            document.getElementById('traineeUserName').textContent = trainee ? trainee.name + ' (' + trainee.memberId + ')' : 'User (' + user.memberId + ')';
 
             let html = '';
             for (const [section, items] of Object.entries(BQ_CHECKLIST)) {
@@ -824,6 +919,10 @@
         }
 
         function renderLeaderView() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const leader = LEADERS.find(l => l.memberId === user.memberId);
+            document.getElementById('leaderUserName').textContent = leader ? leader.name + ' (' + leader.memberId + ')' : 'Leader (' + user.memberId + ')';
+
             const stats = { onTrack: 0, atRisk: 0, needsAttention: 0, total: 0, avgProgress: 0 };
             const leaderboardData = TRAINEES.map(trainee => {
                 const progress = parseInt(localStorage.getItem(`${trainee.memberId}-progress`) || '0');
@@ -901,54 +1000,25 @@
             document.getElementById('detailModal').classList.remove('show');
         }
 
-        function needHelp() {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            const trainee = TRAINEES.find(t => t.memberId === user.memberId);
-            const message = `Help Request from ${trainee.name} (${user.memberId}). Please reach out to assist with BQ training.`;
-            
-            alert('Your help request has been sent to Yohannes. She will contact you via Slack or email soon.');
-            
-            // Send email (in production, this would be a backend call)
-            console.log('Help request sent:', message);
+        function openHelpModal() {
+            document.getElementById('helpModal').classList.add('show');
+            document.getElementById('helpTopic').value = '';
+            document.getElementById('helpDetails').value = '';
         }
 
-        function showFeedbackView() {
-            document.getElementById('traineeView').classList.remove('active');
-            document.getElementById('feedbackView').classList.add('active');
+        function closeHelpModal() {
+            document.getElementById('helpModal').classList.remove('show');
         }
 
-        function submitFeedback() {
-            const helpful = document.querySelector('input[name="helpful"]:checked')?.value || 'not answered';
-            const useAgain = document.querySelector('input[name="useAgain"]:checked')?.value || 'not answered';
-            const comments = document.getElementById('comments').value || 'no comments';
-            
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            const trainee = TRAINEES.find(t => t.memberId === user.memberId);
-            
-            const feedback = {
-                name: trainee.name,
-                memberId: user.memberId,
-                helpful: helpful,
-                useAgain: useAgain,
-                comments: comments,
-                timestamp: new Date().toLocaleString()
-            };
-            
-            alert('Thank you for your feedback! You can now logout.');
-            console.log('Feedback submitted:', feedback);
+        function openLeaderHelpModal() {
+            document.getElementById('leaderHelpModal').classList.add('show');
+            document.getElementById('leaderHelpTopic').value = '';
+            document.getElementById('leaderHelpDetails').value = '';
         }
 
-        window.addEventListener('storage', () => {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            if (user) {
-                if (user.type === 'trainee') renderTraineeView();
-                else renderLeaderView();
-            }
-        });
+        function closeLeaderHelpModal() {
+            document.getElementById('leaderHelpModal').classList.remove('show');
+        }
 
-        window.addEventListener('load', () => {
-            loadUsername();
-        });
-    </script>
-</body>
-</html>
+        function submitHelpRequest() {
+            const use
