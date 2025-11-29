@@ -43,6 +43,27 @@
             margin: 0 auto;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
+        .login-type-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .login-type-btn {
+            flex: 1;
+            padding: 12px;
+            background: #ddd;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .login-type-btn.active {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border-color: #dc3545;
+        }
         .form-group {
             margin-bottom: 20px;
         }
@@ -52,7 +73,7 @@
             font-weight: bold;
             color: #1e3c72;
         }
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -73,10 +94,23 @@
         .form-group button:hover {
             background: linear-gradient(135deg, #c82333, #a71e2a);
         }
-        #traineeView, #leaderView {
+        .reset-password-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .reset-password-link a {
+            color: #dc3545;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .reset-password-link a:hover {
+            text-decoration: underline;
+        }
+        #traineeView, #leaderView, #resetView {
             display: none;
         }
-        #traineeView.active, #leaderView.active {
+        #traineeView.active, #leaderView.active, #resetView.active {
             display: block;
         }
         .checklist-item {
@@ -266,6 +300,18 @@
         .logout-btn:hover {
             background: #c82333;
         }
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        .back-btn:hover {
+            background: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -278,21 +324,48 @@
             <div class="login-form">
                 <div class="form-group">
                     <label>Login Type:</label>
-                    <select id="loginType" onchange="updateLoginForm()">
-                        <option value="trainee">Trainee</option>
-                        <option value="leader">Leader</option>
-                    </select>
+                    <div class="login-type-buttons">
+                        <button class="login-type-btn active" onclick="setLoginType('trainee')">Trainee</button>
+                        <button class="login-type-btn" onclick="setLoginType('leader')">Leader</button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="memberId">Member ID:</label>
                     <input type="text" id="memberId" placeholder="Enter your Member ID">
                 </div>
                 <div class="form-group" id="credentialGroup">
-                    <label for="credential">PIN (6 digits):</label>
+                    <label for="credential" id="credentialLabel">PIN (6 digits):</label>
                     <input type="password" id="credential" placeholder="Enter 6-digit PIN">
                 </div>
                 <div class="form-group">
                     <button onclick="login()">Login</button>
+                </div>
+                <div class="reset-password-link">
+                    <a onclick="showResetView()">Forgot your password? Reset here</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="resetView">
+            <div class="header">
+                <h1>🔐 Reset Password</h1>
+                <button class="back-btn" onclick="showLoginView()">Back to Login</button>
+            </div>
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="resetMemberId">Member ID:</label>
+                    <input type="text" id="resetMemberId" placeholder="Enter your Member ID">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password (6+ characters):</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm password">
+                </div>
+                <div class="form-group">
+                    <button onclick="resetPassword()">Reset Password</button>
                 </div>
             </div>
         </div>
@@ -377,6 +450,8 @@
     </div>
 
     <script>
+        let currentLoginType = 'trainee';
+
         const TRAINEES = [
             { memberId: '5009810', name: 'Jessica Arciero' },
             { memberId: '1249011', name: 'Stephen Belcher' },
@@ -403,9 +478,17 @@
             final: ['Verify training completed', 'Confirm boater certification', 'Confirm uniform inspection', 'Check BQ Status Form', 'Mentor review', 'Request BQ status', 'Apply for ID card', 'BQ status confirmed', 'ID card received']
         };
 
-        function updateLoginForm() {
-            const type = document.getElementById('loginType').value;
-            const label = document.querySelector('#credentialGroup label');
+        const LEADER_PASSWORDS = {
+            '5009623': '116511'
+        };
+
+        function setLoginType(type) {
+            currentLoginType = type;
+            const buttons = document.querySelectorAll('.login-type-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const label = document.getElementById('credentialLabel');
             const input = document.getElementById('credential');
             if (type === 'trainee') {
                 label.textContent = 'PIN (6 digits):';
@@ -417,7 +500,6 @@
         }
 
         function login() {
-            const loginType = document.getElementById('loginType').value;
             const memberId = document.getElementById('memberId').value;
             const credential = document.getElementById('credential').value;
 
@@ -426,7 +508,7 @@
                 return;
             }
 
-            if (loginType === 'trainee') {
+            if (currentLoginType === 'trainee') {
                 if (credential.length !== 6 || isNaN(credential)) {
                     alert('PIN must be 6 digits');
                     return;
@@ -434,8 +516,8 @@
                 localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'trainee' }));
                 showTraineeView();
             } else {
-                if (credential.length < 6) {
-                    alert('Password must be at least 6 characters');
+                if (!LEADER_PASSWORDS[memberId] || LEADER_PASSWORDS[memberId] !== credential) {
+                    alert('Invalid Member ID or Password');
                     return;
                 }
                 localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'leader' }));
@@ -443,11 +525,49 @@
             }
         }
 
-        function logout() {
-            localStorage.removeItem('currentUser');
+        function showLoginView() {
             document.getElementById('loginView').classList.add('active');
+            document.getElementById('resetView').classList.remove('active');
             document.getElementById('traineeView').classList.remove('active');
             document.getElementById('leaderView').classList.remove('active');
+        }
+
+        function showResetView() {
+            document.getElementById('loginView').classList.remove('active');
+            document.getElementById('resetView').classList.add('active');
+        }
+
+        function resetPassword() {
+            const memberId = document.getElementById('resetMemberId').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!memberId || !newPassword || !confirmPassword) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            LEADER_PASSWORDS[memberId] = newPassword;
+            alert('Password reset successful! You can now login with your new password.');
+            showLoginView();
+            document.getElementById('resetMemberId').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            showLoginView();
             document.getElementById('memberId').value = '';
             document.getElementById('credential').value = '';
         }
@@ -631,8 +751,6 @@
                 else renderLeaderView();
             }
         });
-
-        updateLoginForm();
     </script>
 </body>
 </html>
