@@ -35,6 +35,24 @@
             font-size: 2rem;
             margin-bottom: 10px;
         }
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
         .login-form {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -107,10 +125,10 @@
         .reset-password-link a:hover {
             text-decoration: underline;
         }
-        #traineeView, #leaderView, #resetView {
+        #loginView, #traineeView, #leaderView, #resetView {
             display: none;
         }
-        #traineeView.active, #leaderView.active, #resetView.active {
+        #loginView.active, #traineeView.active, #leaderView.active, #resetView.active {
             display: block;
         }
         .checklist-item {
@@ -288,18 +306,6 @@
             font-size: 1.5rem;
             margin-right: 10px;
         }
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 20px 0;
-        }
-        .logout-btn:hover {
-            background: #c82333;
-        }
         .back-btn {
             background: #6c757d;
             color: white;
@@ -372,8 +378,10 @@
 
         <div id="traineeView">
             <div class="header">
-                <h1>Your BQ Progress</h1>
-                <button class="logout-btn" onclick="logout()">Logout</button>
+                <div class="header-controls">
+                    <h1>Your BQ Progress</h1>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
             </div>
             <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
                 <h2 id="traineeName" style="color: #1e3c72; margin-bottom: 20px;"></h2>
@@ -397,8 +405,10 @@
 
         <div id="leaderView">
             <div class="header">
-                <h1>Leadership Dashboard</h1>
-                <button class="logout-btn" onclick="logout()">Logout</button>
+                <div class="header-controls">
+                    <h1>Leadership Dashboard</h1>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
             </div>
             <div class="stat-cards">
                 <div class="stat-card">
@@ -574,6 +584,7 @@
 
         function showTraineeView() {
             document.getElementById('loginView').classList.remove('active');
+            document.getElementById('resetView').classList.remove('active');
             document.getElementById('leaderView').classList.remove('active');
             document.getElementById('traineeView').classList.add('active');
             renderTraineeView();
@@ -581,6 +592,7 @@
 
         function showLeaderView() {
             document.getElementById('loginView').classList.remove('active');
+            document.getElementById('resetView').classList.remove('active');
             document.getElementById('traineeView').classList.remove('active');
             document.getElementById('leaderView').classList.add('active');
             renderLeaderView();
