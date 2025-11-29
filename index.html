@@ -505,20 +505,24 @@
                 input.placeholder = 'Enter 6-digit PIN';
             } else {
                 label.textContent = 'Password:';
-                input.placeholder = 'Enter password';
+                input.placeholder = 'Enter password (or leave blank to set one)';
             }
         }
 
         function login() {
             const memberId = document.getElementById('memberId').value;
-            const credential = document.getElementById('credential').value;
+            let credential = document.getElementById('credential').value;
 
-            if (!memberId || !credential) {
-                alert('Please enter all fields');
+            if (!memberId) {
+                alert('Please enter your Member ID');
                 return;
             }
 
             if (currentLoginType === 'trainee') {
+                if (!credential) {
+                    alert('Please enter your PIN');
+                    return;
+                }
                 if (credential.length !== 6 || isNaN(credential)) {
                     alert('PIN must be 6 digits');
                     return;
@@ -526,12 +530,30 @@
                 localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'trainee' }));
                 showTraineeView();
             } else {
-                if (!LEADER_PASSWORDS[memberId] || LEADER_PASSWORDS[memberId] !== credential) {
-                    alert('Invalid Member ID or Password');
-                    return;
+                // Leader login - if no password entered, prompt to set one
+                if (!credential) {
+                    const newPassword = prompt('No password set. Enter a new password (6+ characters):');
+                    if (!newPassword) {
+                        alert('Password is required');
+                        return;
+                    }
+                    if (newPassword.length < 6) {
+                        alert('Password must be at least 6 characters');
+                        return;
+                    }
+                    LEADER_PASSWORDS[memberId] = newPassword;
+                    localStorage.setItem('currentUser', JSON.stringify({ memberId, credential: newPassword, type: 'leader' }));
+                    alert('Password set successfully!');
+                    showLeaderView();
+                } else {
+                    // Password was entered - verify it
+                    if (!LEADER_PASSWORDS[memberId] || LEADER_PASSWORDS[memberId] !== credential) {
+                        alert('Invalid Member ID or Password');
+                        return;
+                    }
+                    localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'leader' }));
+                    showLeaderView();
                 }
-                localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'leader' }));
-                showLeaderView();
             }
         }
 
