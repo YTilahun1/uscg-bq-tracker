@@ -183,4 +183,416 @@
         .close-modal-btn {
             color: #aaa;
             float: right;
-            font-s
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-modal-btn:hover {
+            color: black;
+        }
+        .section-breakdown {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .section-breakdown h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .stat-card h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .leaderboard-table thead {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .leaderboard-table th {
+            font-weight: bold;
+        }
+        .leaderboard-table tbody tr:nth-child(odd) {
+            background: #f8f9fa;
+        }
+        .leaderboard-table tbody tr:hover {
+            background: #e7f3ff;
+        }
+        .rank-medal {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loginView" class="active">
+            <div class="header">
+                <h1>🇺🇸 USCG Auxiliary BQ Training Tracker</h1>
+                <p>Track your path to Basically Qualified status</p>
+            </div>
+            <div class="login-form">
+                <div class="form-group">
+                    <label>Login Type:</label>
+                    <select id="loginType" onchange="updateLoginForm()">
+                        <option value="trainee">Trainee</option>
+                        <option value="leader">Leader</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="memberId">Member ID:</label>
+                    <input type="text" id="memberId" placeholder="Enter your Member ID">
+                </div>
+                <div class="form-group" id="credentialGroup">
+                    <label for="credential">PIN (6 digits):</label>
+                    <input type="password" id="credential" placeholder="Enter 6-digit PIN">
+                </div>
+                <div class="form-group">
+                    <button onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="traineeView">
+            <div class="header">
+                <h1>Your BQ Progress</h1>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                <h2 id="traineeName" style="color: #1e3c72; margin-bottom: 20px;"></h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;">0%</div>
+                </div>
+                <div id="checklistContainer" style="margin-top: 30px;"></div>
+                <h3 style="margin-top: 40px; color: #1e3c72;">📊 Leaderboard</h3>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Trainee</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody id="traineeLeaderboard"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="leaderView">
+            <div class="header">
+                <h1>Leadership Dashboard</h1>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <h3>On Track</h3>
+                    <div class="stat-number" id="onTrackCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>At Risk</h3>
+                    <div class="stat-number" id="atRiskCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Needs Attention</h3>
+                    <div class="stat-number" id="needsAttentionCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Group Average</h3>
+                    <div class="stat-number" id="groupAverage">0%</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">👥 Trainees</h2>
+                <div class="admin-grid" id="adminGrid"></div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #1e3c72; margin-bottom: 20px;">🏆 Trainee Leaderboard</h2>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Trainee</th>
+                            <th>Member ID</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderLeaderboard"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="detailModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal-btn" onclick="closeDetailModal()">&times;</span>
+                <div id="detailContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TRAINEES = [
+            { memberId: '5009810', name: 'Jessica Arciero' },
+            { memberId: '1249011', name: 'Stephen Belcher' },
+            { memberId: '5006078', name: 'Joseph Cerletti' },
+            { memberId: '5005376', name: 'Hanley Chan' },
+            { memberId: '5009795', name: 'Cody Jokela' },
+            { memberId: '5009811', name: 'Sheila Jessup' },
+            { memberId: '1215416', name: 'Gregory Maroulas' },
+            { memberId: '1209105', name: 'Robert Tucknott' },
+            { memberId: '5009561', name: 'Jake Yoshino' },
+            { memberId: '5010123', name: 'Daniel Gamache' },
+            { memberId: '5010122', name: 'Brian Tang' },
+            { memberId: '5009876', name: 'Chris Chen' },
+            { memberId: '5009877', name: 'Jarvis Delaine' },
+            { memberId: '5009878', name: 'Patrick Maguire' },
+            { memberId: '5009879', name: 'Nauzer Gotla' }
+        ];
+
+        const BQ_CHECKLIST = {
+            setup: ['Secure welcome letter', 'Save Member ID and Flotilla Number', 'Set up login credentials', 'Confirm account activation', 'Test Moodle access', 'Locate training portal', 'Get enrollment keys', 'System navigation notes'],
+            training: ['California Boater Card', 'Email boater certificate', 'AUXCT CORE Certification', 'Security Fundamentals', 'Privacy Awareness', 'Sexual Harassment Prevention', 'Suicide Prevention', 'Sexual Assault Prevention', 'Civil Rights Awareness', 'Ethics Training', 'FEMA ICS-100', 'FEMA IS-700', 'Email FEMA certificates', 'BQC II Module 1', 'BQC II Module 2', 'BQC II Module 3', 'BQC II Module 4', 'BQC II Module 6', 'BQC II Module 7', 'Bloodborne Pathogens', 'Risk Management', 'Download certificates', 'Training tips noted'],
+            records: ['AUXDATA II access', 'AD2 training', 'Member Records', 'Activity Log', 'My Competencies', 'My Tasks', 'My Awards', 'Verify training records', 'Certificate timeline', 'Follow-up timeline', 'FEMA certificates uploaded', 'Bloodborne Pathogens listed', 'Member information', 'Submit missing certificates'],
+            uniforms: ['Review Uniform Manual', 'Research uniform options', 'Check for donated uniforms', 'ODU Ball Cap', 'Name Tape', 'USCG AUXILIARY Tape', 'ODU Blouse', 'ODU Trousers', 'Blue T-Shirt', 'Riggers Belt', 'ODU Collar Device', 'Ball Cap Device', 'Tactical Boots', 'Black Military Socks', 'Trouser Blousers', 'Dress Shirt', 'Dress Trousers', 'Garrison Cap', 'Auxiliary Belt', 'Name Tag', 'Shoulder Boards', 'Garrison Cap Device', 'Dress Shoes', 'Thin Black Socks', 'Visit CGX Shop', 'Acquire uniform', 'Schedule inspection', 'Pass inspection'],
+            final: ['Verify training completed', 'Confirm boater certification', 'Confirm uniform inspection', 'Check BQ Status Form', 'Mentor review', 'Request BQ status', 'Apply for ID card', 'BQ status confirmed', 'ID card received']
+        };
+
+        function updateLoginForm() {
+            const type = document.getElementById('loginType').value;
+            const label = document.querySelector('#credentialGroup label');
+            const input = document.getElementById('credential');
+            if (type === 'trainee') {
+                label.textContent = 'PIN (6 digits):';
+                input.placeholder = 'Enter 6-digit PIN';
+            } else {
+                label.textContent = 'Password:';
+                input.placeholder = 'Enter password';
+            }
+        }
+
+        function login() {
+            const loginType = document.getElementById('loginType').value;
+            const memberId = document.getElementById('memberId').value;
+            const credential = document.getElementById('credential').value;
+
+            if (!memberId || !credential) {
+                alert('Please enter all fields');
+                return;
+            }
+
+            if (loginType === 'trainee') {
+                if (credential.length !== 6 || isNaN(credential)) {
+                    alert('PIN must be 6 digits');
+                    return;
+                }
+                localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'trainee' }));
+                showTraineeView();
+            } else {
+                if (credential.length < 6) {
+                    alert('Password must be at least 6 characters');
+                    return;
+                }
+                localStorage.setItem('currentUser', JSON.stringify({ memberId, credential, type: 'leader' }));
+                showLeaderView();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('loginView').classList.add('active');
+            document.getElementById('traineeView').classList.remove('active');
+            document.getElementById('leaderView').classList.remove('active');
+            document.getElementById('memberId').value = '';
+            document.getElementById('credential').value = '';
+        }
+
+        function showTraineeView() {
+            document.getElementById('loginView').classList.remove('active');
+            document.getElementById('leaderView').classList.remove('active');
+            document.getElementById('traineeView').classList.add('active');
+            renderTraineeView();
+        }
+
+        function showLeaderView() {
+            document.getElementById('loginView').classList.remove('active');
+            document.getElementById('traineeView').classList.remove('active');
+            document.getElementById('leaderView').classList.add('active');
+            renderLeaderView();
+        }
+
+        function renderTraineeView() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const trainee = TRAINEES.find(t => t.memberId === user.memberId);
+            document.getElementById('traineeName').textContent = trainee.name + ' (' + trainee.memberId + ')';
+
+            let html = '';
+            for (const [section, items] of Object.entries(BQ_CHECKLIST)) {
+                html += `<h3 style="color: #1e3c72; margin-top: 30px; margin-bottom: 15px;">📋 ${section.toUpperCase()}</h3>`;
+                items.forEach((item, idx) => {
+                    const itemId = `${user.memberId}-${section}-${idx}`;
+                    const isChecked = localStorage.getItem(itemId) === 'true';
+                    html += `
+                        <div class="checklist-item ${isChecked ? 'completed' : ''}">
+                            <input type="checkbox" id="${itemId}" ${isChecked ? 'checked' : ''} onchange="updateProgress()">
+                            <label for="${itemId}">${item}</label>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('checklistContainer').innerHTML = html;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            let total = 0, completed = 0;
+            for (const [section, items] of Object.entries(BQ_CHECKLIST)) {
+                items.forEach((_, idx) => {
+                    total++;
+                    if (localStorage.getItem(`${user.memberId}-${section}-${idx}`) === 'true') {
+                        completed++;
+                    }
+                });
+            }
+            const progress = Math.round((completed / total) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').textContent = progress + '%';
+            localStorage.setItem(`${user.memberId}-progress`, progress);
+            updateLeaderboards();
+        }
+
+        function updateLeaderboards() {
+            const leaderboardData = TRAINEES.map(trainee => {
+                const progress = parseInt(localStorage.getItem(`${trainee.memberId}-progress`) || '0');
+                return { ...trainee, progress };
+            }).sort((a, b) => b.progress - a.progress);
+
+            let traineeHtml = '';
+            leaderboardData.forEach((t, idx) => {
+                const medals = ['🥇', '🥈', '🥉'];
+                const medal = idx < 3 ? medals[idx] : '';
+                traineeHtml += `
+                    <tr>
+                        <td><span class="rank-medal">${medal}</span>${idx + 1}</td>
+                        <td>${t.name}</td>
+                        <td style="color: #1e3c72; font-weight: bold;">${t.progress}%</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('traineeLeaderboard').innerHTML = traineeHtml;
+
+            let leaderHtml = '';
+            leaderboardData.forEach((t, idx) => {
+                const medals = ['🥇', '🥈', '🥉'];
+                const medal = idx < 3 ? medals[idx] : '';
+                const statusClass = t.progress >= 70 ? '#28a745' : t.progress >= 30 ? '#ffc107' : '#dc3545';
+                const statusText = t.progress >= 70 ? '✓ On Track' : t.progress >= 30 ? '⟳ At Risk' : '⚠ Needs Help';
+                leaderHtml += `
+                    <tr>
+                        <td><span class="rank-medal">${medal}</span>${idx + 1}</td>
+                        <td>${t.name}</td>
+                        <td>${t.memberId}</td>
+                        <td style="color: #1e3c72; font-weight: bold;">${t.progress}%</td>
+                        <td style="text-align: center; background: ${statusClass}; color: white; border-radius: 5px;">${statusText}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('leaderLeaderboard').innerHTML = leaderHtml;
+        }
+
+        function renderLeaderView() {
+            const stats = { onTrack: 0, atRisk: 0, needsAttention: 0, total: 0, avgProgress: 0 };
+            const leaderboardData = TRAINEES.map(trainee => {
+                const progress = parseInt(localStorage.getItem(`${trainee.memberId}-progress`) || '0');
+                if (progress >= 70) stats.onTrack++;
+                else if (progress >= 30) stats.atRisk++;
+                else stats.needsAttention++;
+                stats.total++;
+                stats.avgProgress += progress;
+                return { ...trainee, progress };
+            }).sort((a, b) => b.progress - a.progress);
+
+            stats.avgProgress = Math.round(stats.avgProgress / stats.total);
+
+            document.getElementById('onTrackCount').textContent = stats.onTrack;
+            document.getElementById('atRiskCount').textContent = stats.atRisk;
+            document.getElementById('needsAttentionCount').textContent = stats.needsAttention;
+            document.getElementById('groupAverage').textContent = stats.avgProgress + '%';
+
+            let gridHtml = '';
+            TRAINEES.forEach(trainee => {
+                const progress = parseInt(localStorage.getItem(`${trainee.memberId}-progress`) || '0');
+                const statusClass = progress >= 70 ? 'green' : progress >= 30 ? 'yellow' : 'red';
+                gridHtml += `
+                    <div class="admin-card ${statusClass}" onclick="viewTraineeDetails('${trainee.memberId}')">
+                        <h3>${trainee.name}</h3>
+                        <p>${trainee.memberId}</p>
+                        <div class="percent">${progress}%</div>
+                    </div>
+                `;
+            });
+            document.getElementById('adminGrid').innerHTML = gridHtml;
+
+            let leaderboardHtml = '';
+            leaderboardData.forEach((t, idx) => {
+                const medals = ['🥇', '🥈', '🥉'];
+                const medal = idx < 3 ? medals[idx] : '';
+                const statusClass = t.progress >= 70 ? '#28a745' : t.progress >= 30 ? '#ffc107' : '#dc3545';
+                const statusText = t.progress >= 70 ? '✓ On Track' : t.progress >= 30 ? '⟳ At Risk' : '⚠ Needs Help';
+                leaderboardHtml += `
+                    <tr>
+                        <td><span class="rank-medal">${medal}</span>${idx + 1}</td>
+                        <td>${t.name}</td>
+                        <td>${t.memberId}</td>
+                        <td style="color: #1e3c72; font-weight: bold;">${t.progress}%</td>
+                        <td style="text-align: center; background: ${statusClass}; color: white; border-radius: 5px;">${statusText}</td>
+                    </tr>
+                `;
+            });
+            document.getElemen
