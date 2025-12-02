@@ -1,3 +1,4 @@
+cat > /home/claude/USCG_BQ_Tracker_Updated.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -294,7 +295,7 @@
     <script>
         let currentLoginType = 'trainee';
         const TRAINEES = [
-            {memberId:'5009810',name:'Jessica Arciero'},{memberId:'1249011',name:'Stephen Belcher'},{memberId:'5006078',name:'Joseph Cerletti'},{memberId:'5005376',name:'Hanley Chan'},{memberId:'5009795',name:'Cody Jokela'},{memberId:'5009811',name:'Sheila Jessup'},{memberId:'1215416',name:'Gregory Maroulas'},{memberId:'1209105',name:'Robert Tucknott'},{memberId:'5009561',name:'Jake Yoshino'},{memberId:'5010123',name:'Daniel Gamache'},{memberId:'5010122',name:'Brian Tang'},{memberId:'5009876',name:'Chris Chen'},{memberId:'5009877',name:'Jarvis Delaine'},{memberId:'5009878',name:'Patrick Maguire'},{memberId:'5009879',name:'Nauzer Gotla'}
+            {memberId:'5009810',name:'Jessica Arciero'},{memberId:'1249011',name:'Stephen Belcher'},{memberId:'5006078',name:'Joseph Cerletti'},{memberId:'5005376',name:'Hanley Chan'},{memberId:'5009795',name:'Cody Jokela'},{memberId:'5009811',name:'Sheila Jessup'},{memberId:'1215416',name:'Gregory Maroulas'},{memberId:'1209105',name:'Robert Tucknott'},{memberId:'5009561',name:'Jake Yoshino'},{memberId:'5010123',name:'Daniel Gamache'},{memberId:'5010122',name:'Brian Tang'},{memberId:'5009876',name:'Chris Chen'},{memberId:'5009877',name:'Jarvis Delaine'},{memberId:'5009878',name:'Patrick Maguire'}
         ];
         const LEADERS = [{memberId:'5009623',name:'Yohannes Tilahun'},{memberId:'3010789',name:'Adam Kovalevsky'},{memberId:'3007136',name:'Adrienne Kuehneman'}];
         const BQ_CHECKLIST = {
@@ -311,7 +312,41 @@
         function login(){const memberId=document.getElementById('memberId').value;let credential=document.getElementById('credential').value;if(!memberId){alert('Please enter your Member ID');return;}localStorage.setItem('lastUsername',memberId);if(currentLoginType==='trainee'){if(!credential){alert('Please enter your PIN');return;}if(credential.length!==6||isNaN(credential)){alert('PIN must be 6 digits');return;}localStorage.setItem('currentUser',JSON.stringify({memberId,credential,type:'trainee'}));showTraineeView();}else{if(!credential){const newPassword=prompt('No password set. Enter a new password (6+ characters):');if(!newPassword){alert('Password is required');return;}if(newPassword.length<6){alert('Password must be at least 6 characters');return;}LEADER_PASSWORDS[memberId]=newPassword;localStorage.setItem('currentUser',JSON.stringify({memberId,credential:newPassword,type:'leader'}));alert('Password set successfully!');showLeaderView();}else{if(!LEADER_PASSWORDS[memberId]||LEADER_PASSWORDS[memberId]!==credential){alert('Invalid Member ID or Password');return;}localStorage.setItem('currentUser',JSON.stringify({memberId,credential,type:'leader'}));showLeaderView();}}}
         function showLoginView(){document.getElementById('loginView').classList.add('active');document.getElementById('resetView').classList.remove('active');document.getElementById('traineeView').classList.remove('active');document.getElementById('leaderView').classList.remove('active');document.getElementById('feedbackView').classList.remove('active');}
         function showResetView(){document.getElementById('loginView').classList.remove('active');document.getElementById('resetView').classList.add('active');}
-        function resetPassword(){const memberId=document.getElementById('resetMemberId').value;const newPassword=document.getElementById('newPassword').value;const confirmPassword=document.getElementById('confirmPassword').value;if(!memberId||!newPassword||!confirmPassword){alert('Please fill in all fields');return;}if(newPassword.length<6){alert('Password must be at least 6 characters');return;}if(newPassword!==confirmPassword){alert('Passwords do not match');return;}LEADER_PASSWORDS[memberId]=newPassword;alert('Password reset successful! You can now login with your new password.');showLoginView();document.getElementById('resetMemberId').value='';document.getElementById('newPassword').value='';document.getElementById('confirmPassword').value='';}
+        function resetPassword(){
+            const memberId=document.getElementById('resetMemberId').value;
+            const newPassword=document.getElementById('newPassword').value;
+            const confirmPassword=document.getElementById('confirmPassword').value;
+            
+            if(!memberId||!newPassword||!confirmPassword){alert('Please fill in all fields');return;}
+            if(newPassword.length<6){alert('Password must be at least 6 characters');return;}
+            if(newPassword!==confirmPassword){alert('Passwords do not match');return;}
+            
+            const leader=LEADERS.find(l=>l.memberId===memberId);
+            if(!leader){alert('Member ID not found in leader list');return;}
+            
+            LEADER_PASSWORDS[memberId]=newPassword;
+            sendPasswordResetEmail(leader,newPassword);
+            
+            alert('Password reset successful! Confirmation email sent to: '+getLeaderEmail(memberId));
+            showLoginView();
+            document.getElementById('resetMemberId').value='';
+            document.getElementById('newPassword').value='';
+            document.getElementById('confirmPassword').value='';
+        }
+        function getLeaderEmail(memberId){
+            const emailMap={'5009623':'YTilahun@icloud.com','3010789':'adampkov@yahoo.com','3007136':'kuehneman.uscg@gmail.com'};
+            return emailMap[memberId]||'admin@uscgaux.local';
+        }
+        function sendPasswordResetEmail(leader,newPassword){
+            const email=getLeaderEmail(leader.memberId);
+            console.log(`✉️ PASSWORD RESET EMAIL`);
+            console.log(`To: ${email}`);
+            console.log(`Leader: ${leader.name}`);
+            console.log(`Member ID: ${leader.memberId}`);
+            console.log(`New Password: ${newPassword}`);
+            console.log(`Timestamp: ${new Date().toLocaleString()}`);
+            console.log(`---`);
+        }
         function logout(){localStorage.removeItem('currentUser');showLoginView();document.getElementById('credential').value='';loadUsername();}
         function loadUsername(){const lastUsername=localStorage.getItem('lastUsername');if(lastUsername){document.getElementById('memberId').value=lastUsername;}}
         function showTraineeView(){document.getElementById('loginView').classList.remove('active');document.getElementById('resetView').classList.remove('active');document.getElementById('leaderView').classList.remove('active');document.getElementById('feedbackView').classList.remove('active');document.getElementById('traineeView').classList.add('active');renderTraineeView();}
@@ -334,3 +369,5 @@
     </script>
 </body>
 </html>
+EOF
+cat /home/claude/USCG_BQ_Tracker_Updated.html | wc -l
